@@ -6,15 +6,17 @@ struct Item {
   let name: String
   let addedByUser: String
   let description: String
+  let imageUrl: String
+  let quantity: NSNumber
   let ref: FIRDatabaseReference?
-  var completed: Bool
 
-  init(name: String, addedByUser: String, description: String, completed: Bool, key: String = "") {
+  init(name: String, addedByUser: String, description: String, imageUrl: String, quantity: NSNumber, key: String = "") {
     self.key = key
     self.name = name
     self.addedByUser = addedByUser
     self.description = description
-    self.completed = completed
+    self.imageUrl = imageUrl
+    self.quantity = quantity
     self.ref = nil
   }
 
@@ -24,7 +26,8 @@ struct Item {
     name = snapshotValue["shortname"] as! String
     addedByUser = snapshotValue["donorname"] as! String
     description = snapshotValue["longname"] as! String
-    completed = true // snapshotValue["completed"] as! Bool
+    imageUrl = snapshotValue["imageurl"] as! String
+    quantity = snapshotValue["qty"] as! NSNumber
     ref = snapshot.ref
   }
 
@@ -33,7 +36,8 @@ struct Item {
       "name": name,
       "addedByUser": addedByUser,
       "description": description,
-      "completed": completed
+      "imageUrl": imageUrl,
+      "quantity": quantity
     ]
   }
 

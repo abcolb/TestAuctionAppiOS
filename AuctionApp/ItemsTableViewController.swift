@@ -9,6 +9,7 @@ class ItemsTableViewController: UITableViewController, UISearchBarDelegate, Item
   var filterType: FilterType = .all
   var sizingCell: ItemTableViewCell?
   let ref = FIRDatabase.database().reference(withPath: "items")
+  var itemDetailViewController: ItemDetailViewController? = nil
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -36,24 +37,7 @@ class ItemsTableViewController: UITableViewController, UISearchBarDelegate, Item
   }
 
   override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-    //if iOS8 { 9 and up??
-    //  return UITableViewAutomaticDimension
-    //}else{
-    if let cell = sizingCell {
-      let padding = 353
-      let minHeightText: NSString = "\n\n"
-      let font = UIFont(name: "Avenir Light", size: 15.0)!
-      let attributes =  [NSFontAttributeName: font] as NSDictionary
-      let item = items[indexPath.row]
-
-      let minSize = minHeightText.boundingRect(with: CGSize(width: (view.frame.size.width - 40), height: 1000), options: .usesLineFragmentOrigin, attributes: attributes as? [String : Any], context: nil).height
-
-      let maxSize = item.description.boundingRect(with: CGSize(width: (view.frame.size.width - 40), height: 1000), options: .usesLineFragmentOrigin, attributes: attributes as? [String : Any], context: nil).height + 50
-
-      return (max(minSize, maxSize) + CGFloat(padding))
-    }else{
-      return 392
-    }
+    return 100
   }
 
   override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -65,7 +49,6 @@ class ItemsTableViewController: UITableViewController, UISearchBarDelegate, Item
   func configureCellForIndexPath(_ cell: ItemTableViewCell, indexPath: IndexPath) -> ItemTableViewCell {
     let item = items[indexPath.row]
     
-    //cell.itemImageView.image = nil
     // var url:URL = URL(string: item.imageUrl)!
     // cell.itemImageView.setImageWith(url)
     
@@ -88,9 +71,29 @@ class ItemsTableViewController: UITableViewController, UISearchBarDelegate, Item
      })
      }*/
     
+    cell.itemImageView.image = UIImage(named: "sproket")
     cell.itemDonorLabel.text = item.addedByUser
     cell.itemTitleLabel.text = item.name
     cell.itemDescriptionLabel.text = item.description
+    cell.numAvailableLabel.text = item.quantity.stringValue + " Available"
+    
+    if item.imageUrl.characters.count > 0 {
+      print("IMAGEURL", item.imageUrl)
+      if let url = URL(string: item.imageUrl) {
+        URLSession.shared.dataTask(with: url) { (data, response, error) in
+          if (error != nil) {
+            print("Failed fetching image:", error)
+          } else if let response = response as? HTTPURLResponse, response.statusCode != 200 {
+            print("Not a proper HTTPURLResponse or statusCode")
+          } else if (data != nil) {
+            print("SUCCESS")
+            DispatchQueue.main.async {
+              cell.itemImageView.image = UIImage(data: data!)
+            }
+          }
+        }.resume()
+      }
+    }
     
     /*if item.quantity > 1 {
      // var bidsString = item.currentPrice.map({bidPrice in "$\(bidPrice)"}).joined(separator: ", ")
@@ -181,16 +184,26 @@ class ItemsTableViewController: UITableViewController, UISearchBarDelegate, Item
     }
   }
 
-  override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+  /*override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     guard let cell = tableView.cellForRow(at: indexPath) else { return }
     var item = items[indexPath.row]
     print(item)
-    //tableView.reloadData()
-  }
+    // tableView.reloadData()
+  }*/
 
   /*func searchForQuery(_ query: String) -> ([Item]) {
     return applyFilter(.search(searchTerm: query))
   }*/
+  
+  override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    if segue.identifier == "showItem" {
+      if let indexPath = tableView.indexPathForSelectedRow {
+        let item = items[indexPath.row]
+        let controller = segue.destination as! ItemDetailViewController
+        controller.detailItem = item
+      }
+    }
+  }
 
   func cellDidPressBid(_ item: Item) {
     

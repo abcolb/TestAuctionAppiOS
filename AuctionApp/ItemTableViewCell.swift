@@ -23,12 +23,12 @@ class ItemTableViewCell: UITableViewCell {
   //@IBOutlet var moreInfoView: UIView!
   @IBOutlet var itemDescriptionLabel: UILabel!
   @IBOutlet var itemTitleLabel: UILabel!
-  //@IBOutlet var itemImageView: UIImageView!
+  @IBOutlet var itemImageView: UIImageView!
   //@IBOutlet var currentBidLabel: UILabel!
   //@IBOutlet var numberOfBidsLabel: UILabel!
   @IBOutlet var itemDonorLabel: UILabel!
   //@IBOutlet var headerBackground: UIView!
-  //@IBOutlet var availLabel: UILabel!
+  @IBOutlet var numAvailableLabel: UILabel!
   var alreadyLoaded: Bool!
   
   
@@ -56,7 +56,6 @@ class ItemTableViewCell: UITableViewCell {
     
     cardContainer.layer.cornerRadius = 4
     cardContainer.clipsToBounds = true
-    
   }
   
   func callDelegateWithBid(){
