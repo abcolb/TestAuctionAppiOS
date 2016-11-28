@@ -31,7 +31,7 @@ class ItemDetailViewController: UIViewController {
   
   func configureView() {
     if let item = self.detailItem {
-      if let itemDescriptionLabel = itemDescriptionLabel, let itemTitleLabel = itemTitleLabel, let itemImageView = itemImageView, let itemDonorLable = itemDonorLabel, let currentBidLabel = currentBidLabel, let bidderSegmentedControl = bidderSegmentedControl {
+      if let itemDescriptionLabel = itemDescriptionLabel, let itemTitleLabel = itemTitleLabel, let itemImageView = itemImageView, let itemDonorLabel = itemDonorLabel, let currentBidLabel = currentBidLabel, let bidderSegmentedControl = bidderSegmentedControl {
         itemDescriptionLabel.text = item.description
         itemTitleLabel.text = item.name
         itemDonorLabel.text = item.addedByUser
@@ -62,6 +62,7 @@ class ItemDetailViewController: UIViewController {
         bidderSegmentedControl.setTitle("+$10", forSegmentAt: 0)
         bidderSegmentedControl.setTitle("+$25", forSegmentAt: 1)
         bidderSegmentedControl.setTitle("+$50", forSegmentAt: 2)
+        bidderSegmentedControl.selectedSegmentIndex = -1
       }
     }
   }

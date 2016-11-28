@@ -1,59 +1,69 @@
 import UIKit
 
 class LoginViewController: UIViewController {
-
-  // MARK: Constants
+  
   let loginToList = "LoginToList"
-
-  // MARK: Outlets
-  @IBOutlet weak var textFieldLoginEmail: UITextField!
-  @IBOutlet weak var textFieldLoginPassword: UITextField!
-
-  // MARK: Actions
-  @IBAction func loginDidTouch(_ sender: AnyObject) {
+  
+  @IBOutlet weak var emailTextField: UITextField!
+  @IBOutlet weak var passwordTextField: UITextField!
+  
+  func signedIn(_ user: FIRUser?) {
+    // tell app we're logged in
     performSegue(withIdentifier: loginToList, sender: nil)
   }
-
-  @IBAction func signUpDidTouch(_ sender: AnyObject) {
-    let alert = UIAlertController(title: "Register",
-                                  message: "Register",
-                                  preferredStyle: .alert)
-
-    let saveAction = UIAlertAction(title: "Save",
-                                   style: .default) { action in
-
+   
+  func setDisplayName(_ user: FIRUser) {
+   let changeRequest = user.profileChangeRequest()
+   changeRequest.displayName = user.email!.components(separatedBy: "@")[0]
+   changeRequest.commitChanges(){ (error) in
+    if let error = error {
+      print(error.localizedDescription)
+      return
     }
-
-    let cancelAction = UIAlertAction(title: "Cancel",
-                                     style: .default)
-
-    alert.addTextField { textEmail in
-      textEmail.placeholder = "Enter your email"
-    }
-
-    alert.addTextField { textPassword in
-      textPassword.isSecureTextEntry = true
-      textPassword.placeholder = "Enter your password"
-    }
-
-    alert.addAction(saveAction)
-    alert.addAction(cancelAction)
-
-    present(alert, animated: true, completion: nil)
+    self.signedIn(FIRAuth.auth()?.currentUser)
+   }
   }
-
+  
+  @IBAction func loginDidTouch(_ sender: AnyObject) {
+    guard let email = emailTextField.text, let password = passwordTextField.text else { return }
+    FIRAuth.auth()?.signIn(withEmail: email, password: password) { (user, error) in
+     if let error = error {
+      print(error.localizedDescription)
+      return
+     }
+     self.signedIn(user!)
+    }
+    print("click")
+  }
+  
+  @IBAction func signUpDidTouch(_ sender: AnyObject) {
+    guard let email = emailTextField.text, let password = passwordTextField.text else { return }
+    FIRAuth.auth()?.createUser(withEmail: email, password: password) { (user, error) in
+     if let error = error {
+      print(error.localizedDescription)
+      return
+     }
+     self.setDisplayName(user!)
+    }
+    print("click")
+  }
+  
+  override func viewDidAppear(_ animated: Bool) {
+   if let user = FIRAuth.auth()?.currentUser {
+    self.signedIn(user)
+   }
+  }
 }
 
 extension LoginViewController: UITextFieldDelegate {
-
+  
   func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-    if textField == textFieldLoginEmail {
-      textFieldLoginPassword.becomeFirstResponder()
+    if textField == emailTextField {
+      passwordTextField.becomeFirstResponder()
     }
-    if textField == textFieldLoginPassword {
+    if textField == passwordTextField {
       textField.resignFirstResponder()
     }
     return true
   }
-
 }

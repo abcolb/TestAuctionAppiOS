@@ -10,7 +10,18 @@ class ItemsTableViewController: UITableViewController, UISearchBarDelegate, Item
   var sizingCell: ItemTableViewCell?
   let ref = FIRDatabase.database().reference(withPath: "items")
   var itemDetailViewController: ItemDetailViewController? = nil
-
+  
+  func logOutPressed(_ sender: UIButton) {
+    let firebaseAuth = FIRAuth.auth()
+    do {
+      try firebaseAuth?.signOut()
+      // AppState.sharedInstance.signedIn = false
+      dismiss(animated: true, completion: nil)
+    } catch let signOutError as NSError {
+      print ("Error signing out:", signOutError.localizedDescription)
+    }
+  }
+  
   override func viewDidLoad() {
     super.viewDidLoad()
 
@@ -30,6 +41,12 @@ class ItemsTableViewController: UITableViewController, UISearchBarDelegate, Item
     tableView.allowsMultipleSelectionDuringEditing = false
 
     user = User(uid: "FakeId", email: "hungry@person.food")
+    
+    let button = UIButton(type: UIButtonType.custom)
+    button.setImage(UIImage(named: "HSLogOutIcon"), for: UIControlState.normal)
+    button.addTarget(self, action: #selector(logOutPressed), for: UIControlEvents.touchUpInside)
+    button.frame = CGRect(x: 0, y: 0, width: 40, height: 40)
+    self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: button)
   }
 
   override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -48,10 +65,6 @@ class ItemsTableViewController: UITableViewController, UISearchBarDelegate, Item
 
   func configureCellForIndexPath(_ cell: ItemTableViewCell, indexPath: IndexPath) -> ItemTableViewCell {
     let item = items[indexPath.row]
-    
-    // var url:URL = URL(string: item.imageUrl)!
-    // cell.itemImageView.setImageWith(url)
-    
     
     // let fullNameArr = item.donorName.components(separatedBy: " ")
     //cell.donorAvatar.image = nil;
@@ -78,7 +91,6 @@ class ItemsTableViewController: UITableViewController, UISearchBarDelegate, Item
     cell.numAvailableLabel.text = item.quantity.stringValue + " Available"
     
     if item.imageUrl.characters.count > 0 {
-      print("IMAGEURL", item.imageUrl)
       if let url = URL(string: item.imageUrl) {
         URLSession.shared.dataTask(with: url) { (data, response, error) in
           if (error != nil) {
@@ -86,7 +98,6 @@ class ItemsTableViewController: UITableViewController, UISearchBarDelegate, Item
           } else if let response = response as? HTTPURLResponse, response.statusCode != 200 {
             print("Not a proper HTTPURLResponse or statusCode")
           } else if (data != nil) {
-            print("SUCCESS")
             DispatchQueue.main.async {
               cell.itemImageView.image = UIImage(data: data!)
             }
