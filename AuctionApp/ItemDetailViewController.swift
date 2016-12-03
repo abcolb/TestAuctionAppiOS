@@ -15,10 +15,10 @@ class ItemDetailViewController: UIViewController {
   @IBOutlet var itemTitleLabel: UILabel!
   @IBOutlet var itemImageView: UIImageView!
   @IBOutlet var currentBidLabel: UILabel!
-  @IBOutlet var numberOfBidsLabel: UILabel!
+  //@IBOutlet var numberOfBidsLabel: UILabel!
   @IBOutlet var itemDonorLabel: UILabel!
   @IBOutlet var bidderSegmentedControl: UISegmentedControl!
-  @IBOutlet var biddingContainer: UIView!
+  //@IBOutlet var biddingContainer: UIView!
   @IBOutlet var numAvailableLabel: UILabel!
   @IBOutlet var biddingStatusLabel: UILabel!
   
@@ -30,7 +30,7 @@ class ItemDetailViewController: UIViewController {
   
   func configureView() {
     if let item = self.detailItem {
-      if let itemDescriptionLabel = itemDescriptionLabel, let itemTitleLabel = itemTitleLabel, let itemImageView = itemImageView, let itemDonorLabel = itemDonorLabel, let currentBidLabel = currentBidLabel, let bidderSegmentedControl = bidderSegmentedControl, let numAvailableLabel = numAvailableLabel, let numberOfBidsLabel = numberOfBidsLabel, let biddingContainer = biddingContainer, let biddingStatusLabel = biddingStatusLabel {
+      if let itemDescriptionLabel = itemDescriptionLabel, let itemTitleLabel = itemTitleLabel, let itemImageView = itemImageView, let itemDonorLabel = itemDonorLabel, let currentBidLabel = currentBidLabel, let bidderSegmentedControl = bidderSegmentedControl, let numAvailableLabel = numAvailableLabel, let biddingStatusLabel = biddingStatusLabel {
         print("ITEM", itemDescriptionLabel, itemTitleLabel, itemDonorLabel, numAvailableLabel)
         itemDescriptionLabel.text = item.description
         itemTitleLabel.text = item.name
@@ -55,11 +55,11 @@ class ItemDetailViewController: UIViewController {
           }
         }
         
-        if (item.bids.count > 0) {
+        /*if (item.bids.count > 0) {
           numberOfBidsLabel.text = "WINNING BIDS (" + String(item.bids.count) + " so far)"
         } else {
           numberOfBidsLabel.text = "SUGGESTED OPENING BID"
-        }
+        }*/
         currentBidLabel.text = "$" + item.openBid.stringValue
         
         //bidderSegmentControl
