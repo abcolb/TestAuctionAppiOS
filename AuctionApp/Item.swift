@@ -10,10 +10,10 @@ struct Item {
   let quantity: NSNumber
   let openBid: NSNumber
   let isLive: Bool
-  let bids: NSMutableDictionary
+  let bids: [String]
   let ref: FIRDatabaseReference?
 
-  init(name: String, addedByUser: String, description: String, imageUrl: String, quantity: NSNumber, openBid: NSNumber, isLive: Bool, bids: NSMutableDictionary, id: String = "", key: String = "") {
+  init(name: String, addedByUser: String, description: String, imageUrl: String, quantity: NSNumber, openBid: NSNumber, isLive: Bool, bids: [String], key: String = "") {
     self.id = key
     self.name = name
     self.addedByUser = addedByUser
@@ -36,13 +36,14 @@ struct Item {
     quantity = snapshotValue["qty"] as! NSNumber
     openBid = snapshotValue["openbid"] as! NSNumber
     isLive = snapshotValue["islive"] as! Bool
+    var bidsFound : [String] = []
     if snapshotValue["bids"] != nil {
-      //print(snapshotValue["bids"].type)
-      print("BIDS", snapshotValue["bids"])
-      bids = snapshotValue["bids"] as! NSMutableDictionary
-    } else {
-      bids = NSMutableDictionary()
+      let result = snapshotValue["bids"] as! NSMutableDictionary
+      for bid in result {
+        bidsFound.append(bid.key as! String)
+      }
     }
+    bids = bidsFound
     ref = snapshot.ref
   }
 
