@@ -63,24 +63,6 @@ class ItemsTableViewController: UITableViewController, UISearchBarDelegate, Item
   func configureCellForIndexPath(_ cell: ItemTableViewCell, indexPath: IndexPath) -> ItemTableViewCell {
     let item = items[indexPath.row]
     
-    // let fullNameArr = item.donorName.components(separatedBy: " ")
-    //cell.donorAvatar.image = nil;
-    /*if fullNameArr.count > 1{
-     var firstName: String = fullNameArr[0]
-     var lastName: String = fullNameArr[1]
-     var inital: String = firstName[0]
-     var donorAvatarStringUrl = "https://api.hubapi.com/socialintel/v1/avatars?email=\(inital)\(lastName)@hubspot.com"
-     
-     var donorAvatarUrl:URL = URL(string: donorAvatarStringUrl)!
-     
-     cell.donorAvatar.setImageWith(NSURLRequest(url: donorAvatarUrl) as URLRequest, placeholderImage: nil, success: { (urlRequest, response, image) in
-     cell.donorAvatar.image = image.resizedImage(to: cell.donorAvatar.bounds.size)
-     
-     }, failure: { (urlRequest, NSURLResponse, error) in
-     print("error occured: \(error)")
-     })
-     }*/
-    
     cell.itemImageView.image = UIImage(named: "sproket")
     cell.itemDonorLabel.text = item.addedByUser
     cell.itemTitleLabel.text = item.name
@@ -91,9 +73,9 @@ class ItemsTableViewController: UITableViewController, UISearchBarDelegate, Item
       if let url = URL(string: item.imageUrl) {
         URLSession.shared.dataTask(with: url) { (data, response, error) in
           if (error != nil) {
-            print("Failed fetching image:", error)
+            // print("Failed fetching image:", error)
           } else if let response = response as? HTTPURLResponse, response.statusCode != 200 {
-            print("Not a proper HTTPURLResponse or statusCode")
+            // print("Not a proper HTTPURLResponse or statusCode")
           } else if (data != nil) {
             DispatchQueue.main.async {
               cell.itemImageView.image = UIImage(data: data!)
@@ -162,24 +144,19 @@ class ItemsTableViewController: UITableViewController, UISearchBarDelegate, Item
      cell.setDefault()
      }*/
     
-    /*if(item.closeTime.timeIntervalSinceNow < 0.0){
-     cell.dateLabel.text = "Sorry, bidding has closed"
-     cell.bidNowButton.isHidden = true
-     }else{
-     if(item.openTime.timeIntervalSinceNow < 0.0){
-     //open
-     cell.dateLabel.text = "Bidding closes \((item.closeTime as NSDate).relativeTime().lowercased())."
-     cell.bidNowButton.isHidden = false
-     }else{
-     cell.dateLabel.text = "Bidding opens \((item.openTime as NSDate).relativeTime().lowercased())."
-     cell.bidNowButton.isHidden = true
-     }
-     }*/
-    
     let formatter = DateFormatter()
     formatter.dateFormat = "yyyy/MM/dd HH:mm"
+    // SMOKE TEST DATA
     // let BIDDING_OPENS = formatter.date(from: "2016/12/12 15:00")
-    let BIDDING_OPENS = formatter.date(from: "2016/11/11 15:00")
+    // let BIDDING_CLOSES = formatter.date(from: "2016/12/14 20:00")
+    // let LIVE_BIDDING_OPENS = formatter.date(from: "2016/12/14 17:00")
+    
+    // LIVE AUCTION DATA
+    // let BIDDING_OPENS = formatter.date(from: "2016/12/12 15:00")
+    // let BIDDING_CLOSES = formatter.date(from: "2016/12/14 20:00")
+    // let LIVE_BIDDING_OPENS = formatter.date(from: "2016/12/14 17:00")
+    
+    let BIDDING_OPENS = formatter.date(from: "2016/11/12 15:00")
     let BIDDING_CLOSES = formatter.date(from: "2016/12/14 20:00")
     let LIVE_BIDDING_OPENS = formatter.date(from: "2016/12/14 17:00")
     
@@ -216,7 +193,6 @@ class ItemsTableViewController: UITableViewController, UISearchBarDelegate, Item
   /*override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     guard let cell = tableView.cellForRow(at: indexPath) else { return }
     var item = items[indexPath.row]
-    print(item)
     // tableView.reloadData()
   }*/
 
@@ -234,6 +210,7 @@ class ItemsTableViewController: UITableViewController, UISearchBarDelegate, Item
     }
   }
 
+  // kill this?
   func cellDidPressBid(_ item: Item) {
     
     /*let bidVC = UIStoryboard(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "BiddingViewController") as? BiddingViewController
@@ -248,9 +225,9 @@ class ItemsTableViewController: UITableViewController, UISearchBarDelegate, Item
   }
   
   func applyFilter(_ filter: FilterType) -> ([Item]) {
-    print("APPLY FILTER")
+    // print("APPLY FILTER")
     return items.filter({ (item) -> Bool in
-      print(item.name)
+      // print(item.name)
       return filter.predicate.evaluate(with: item)
     })
   }
