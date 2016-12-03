@@ -2,32 +2,47 @@ import Foundation
 
 struct Item {
 
-  let key: String
+  let id: String
   let name: String
   let addedByUser: String
   let description: String
   let imageUrl: String
   let quantity: NSNumber
+  let openBid: NSNumber
+  let isLive: Bool
+  let bids: NSMutableDictionary
   let ref: FIRDatabaseReference?
 
-  init(name: String, addedByUser: String, description: String, imageUrl: String, quantity: NSNumber, key: String = "") {
-    self.key = key
+  init(name: String, addedByUser: String, description: String, imageUrl: String, quantity: NSNumber, openBid: NSNumber, isLive: Bool, bids: NSMutableDictionary, id: String = "", key: String = "") {
+    self.id = key
     self.name = name
     self.addedByUser = addedByUser
     self.description = description
     self.imageUrl = imageUrl
     self.quantity = quantity
+    self.openBid = openBid
+    self.isLive = isLive
+    self.bids = bids
     self.ref = nil
   }
 
   init(snapshot: FIRDataSnapshot) {
-    key = snapshot.key
+    id = snapshot.key
     let snapshotValue = snapshot.value as! [String: AnyObject]
-    name = snapshotValue["shortname"] as! String
+    name = snapshotValue["name"] as! String
     addedByUser = snapshotValue["donorname"] as! String
-    description = snapshotValue["longname"] as! String
+    description = snapshotValue["description"] as! String
     imageUrl = snapshotValue["imageurl"] as! String
     quantity = snapshotValue["qty"] as! NSNumber
+    openBid = snapshotValue["openbid"] as! NSNumber
+    isLive = snapshotValue["islive"] as! Bool
+    if snapshotValue["bids"] != nil {
+      //print(snapshotValue["bids"].type)
+      print("BIDS", snapshotValue["bids"])
+      bids = snapshotValue["bids"] as! NSMutableDictionary
+    } else {
+      bids = NSMutableDictionary()
+    }
     ref = snapshot.ref
   }
 
@@ -37,7 +52,11 @@ struct Item {
       "addedByUser": addedByUser,
       "description": description,
       "imageUrl": imageUrl,
-      "quantity": quantity
+      "quantity": quantity,
+      "openBid": openBid,
+      "quantity": quantity,
+      "isLive": isLive,
+      "bids": bids
     ]
   }
 

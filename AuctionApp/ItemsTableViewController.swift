@@ -5,7 +5,6 @@ class ItemsTableViewController: UITableViewController, UISearchBarDelegate, Item
   @IBOutlet var searchBar: UISearchBar!
 
   var items: [Item] = []
-  var user: User!
   var filterType: FilterType = .all
   var sizingCell: ItemTableViewCell?
   let ref = FIRDatabase.database().reference(withPath: "items")
@@ -39,8 +38,6 @@ class ItemsTableViewController: UITableViewController, UISearchBarDelegate, Item
     })
 
     tableView.allowsMultipleSelectionDuringEditing = false
-
-    user = User(uid: "FakeId", email: "hungry@person.food")
     
     let button = UIButton(type: UIButtonType.custom)
     button.setImage(UIImage(named: "HSLogOutIcon"), for: UIControlState.normal)
@@ -116,14 +113,13 @@ class ItemsTableViewController: UITableViewController, UISearchBarDelegate, Item
      "\(item.quantity) available! Highest \(item.quantity) bidders win. Current highest bids are \(bidsString)" +
      "\n\n" + cell.itemDescriptionLabel.text!
      }*/
-    cell.delegate = self;
+    cell.delegate = self
     cell.item = item
     
     var price: Int?
     var lowPrice: Int?
     
     price = 50 //item.price //item.currentPrice.first
-    //cell.availLabel.text = "1 Available"
     
     /*switch (item.winnerType) {
      case .single:
@@ -179,6 +175,28 @@ class ItemsTableViewController: UITableViewController, UISearchBarDelegate, Item
      cell.bidNowButton.isHidden = true
      }
      }*/
+    
+    let formatter = DateFormatter()
+    formatter.dateFormat = "yyyy/MM/dd HH:mm"
+    // let BIDDING_OPENS = formatter.date(from: "2016/12/12 15:00")
+    let BIDDING_OPENS = formatter.date(from: "2016/11/11 15:00")
+    let BIDDING_CLOSES = formatter.date(from: "2016/12/14 20:00")
+    let LIVE_BIDDING_OPENS = formatter.date(from: "2016/12/14 17:00")
+    
+    let now = NSDate()
+    
+    if (now.compare(BIDDING_CLOSES!) == ComparisonResult.orderedDescending) {
+      cell.bidNowButton.isHidden = true
+    }
+    if (item.isLive) {
+      if (now.compare(LIVE_BIDDING_OPENS!) != ComparisonResult.orderedDescending) {
+        cell.bidNowButton.isHidden = true
+      }
+    } else {
+      if (now.compare(BIDDING_OPENS!) != ComparisonResult.orderedDescending) {
+        cell.bidNowButton.isHidden = true
+      }
+    }
     
     return cell
   }
