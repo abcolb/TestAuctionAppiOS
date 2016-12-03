@@ -15,10 +15,10 @@ class ItemDetailViewController: UIViewController {
   @IBOutlet var itemTitleLabel: UILabel!
   @IBOutlet var itemImageView: UIImageView!
   @IBOutlet var currentBidLabel: UILabel!
-  @IBOutlet var numberOfBidsLabel: UILabel!
+  // @IBOutlet var numberOfBidsLabel: UILabel!
   @IBOutlet var itemDonorLabel: UILabel!
   @IBOutlet var bidderSegmentedControl: UISegmentedControl!
-  @IBOutlet var biddingContainer: UIView!
+  // @IBOutlet var biddingContainer: UIView!
   @IBOutlet var numAvailableLabel: UILabel!
   @IBOutlet var biddingStatusLabel: UILabel!
   
@@ -30,12 +30,12 @@ class ItemDetailViewController: UIViewController {
   
   func configureView() {
     if let item = self.detailItem {
-      if let itemDescriptionLabel = itemDescriptionLabel, let itemTitleLabel = itemTitleLabel, let itemImageView = itemImageView, let itemDonorLabel = itemDonorLabel, let currentBidLabel = currentBidLabel, let bidderSegmentedControl = bidderSegmentedControl, let numAvailableLabel = numAvailableLabel, let biddingStatusLabel = biddingStatusLabel, let _ = biddingContainer, let numberOfBidsLabel = numberOfBidsLabel {
+      if let itemDescriptionLabel = itemDescriptionLabel, let itemTitleLabel = itemTitleLabel, let itemImageView = itemImageView, let itemDonorLabel = itemDonorLabel, let currentBidLabel = currentBidLabel, let bidderSegmentedControl = bidderSegmentedControl, let numAvailableLabel = numAvailableLabel, let biddingStatusLabel = biddingStatusLabel {
         print("ITEM", itemDescriptionLabel, itemTitleLabel, itemDonorLabel, numAvailableLabel)
         itemDescriptionLabel.text = item.description
         itemTitleLabel.text = item.name
         itemDonorLabel.text = item.addedByUser
-        numAvailableLabel.text = item.quantity.stringValue + " Available"
+        numAvailableLabel.text = String(item.quantity) + " Available"
         
         if item.imageUrl.characters.count > 0 {
           // print("IMAGEURL", item.imageUrl)
@@ -60,15 +60,21 @@ class ItemDetailViewController: UIViewController {
         } else {
           numberOfBidsLabel.text = "SUGGESTED OPENING BID"
         }*/
-        currentBidLabel.text = "$" + item.openBid.stringValue
+        currentBidLabel.text = "$" + String(item.openBid)
+        
+        let BIDDING_INCREMENTS : [String: [Int]] = [
+          "SMALL": [1, 5, 10],
+          "MEDIUM": [5, 10, 25],
+          "LARGE": [10, 25, 50]
+        ]
         
         //bidderSegmentControl
         
         let attr = [NSFontAttributeName: UIFont(name: "Avenir Next", size: 14) ?? UIFont.systemFont(ofSize: 14)]
         bidderSegmentedControl.setTitleTextAttributes(attr, for: UIControlState.normal)
-        bidderSegmentedControl.setTitle("+$10", forSegmentAt: 0)
-        bidderSegmentedControl.setTitle("+$25", forSegmentAt: 1)
-        bidderSegmentedControl.setTitle("+$50", forSegmentAt: 2)
+        bidderSegmentedControl.setTitle("$" + String(item.openBid + BIDDING_INCREMENTS["SMALL"]![0]), forSegmentAt: 0)
+        bidderSegmentedControl.setTitle("$" + String(item.openBid + BIDDING_INCREMENTS["SMALL"]![1]), forSegmentAt: 1)
+        bidderSegmentedControl.setTitle("$" + String(item.openBid + BIDDING_INCREMENTS["SMALL"]![2]), forSegmentAt: 2)
         bidderSegmentedControl.selectedSegmentIndex = -1
         
         //biddingStatusLabel
@@ -139,7 +145,7 @@ class ItemDetailViewController: UIViewController {
   
   func alertBid() {
     if let item = self.detailItem {
-      let alertController = UIAlertController(title: "Submit bid?", message: "Bid $" + item.openBid.stringValue + " on " + item.name, preferredStyle: .alert)
+      let alertController = UIAlertController(title: "Submit bid?", message: "Bid $" + String(item.openBid) + " on " + item.name, preferredStyle: .alert)
       
       let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
         // ...

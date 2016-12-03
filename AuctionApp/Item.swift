@@ -7,13 +7,13 @@ struct Item {
   let addedByUser: String
   let description: String
   let imageUrl: String
-  let quantity: NSNumber
-  let openBid: NSNumber
+  let quantity: Int
+  let openBid: Int
   let isLive: Bool
   let bids: [String]
   let ref: FIRDatabaseReference?
 
-  init(name: String, addedByUser: String, description: String, imageUrl: String, quantity: NSNumber, openBid: NSNumber, isLive: Bool, bids: [String], key: String = "") {
+  init(name: String, addedByUser: String, description: String, imageUrl: String, quantity: Int, openBid: Int, isLive: Bool, bids: [String], key: String = "") {
     self.id = key
     self.name = name
     self.addedByUser = addedByUser
@@ -33,8 +33,8 @@ struct Item {
     addedByUser = snapshotValue["donorname"] as! String
     description = snapshotValue["description"] as! String
     imageUrl = snapshotValue["imageurl"] as! String
-    quantity = snapshotValue["qty"] as! NSNumber
-    openBid = snapshotValue["openbid"] as! NSNumber
+    quantity = snapshotValue["qty"] as! Int
+    openBid = snapshotValue["openbid"] as! Int
     isLive = snapshotValue["islive"] as! Bool
     var bidsFound : [String] = []
     if snapshotValue["bids"] != nil {

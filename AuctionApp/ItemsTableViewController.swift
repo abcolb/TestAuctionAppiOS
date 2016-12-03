@@ -67,7 +67,7 @@ class ItemsTableViewController: UITableViewController, UISearchBarDelegate, Item
     cell.itemDonorLabel.text = item.addedByUser
     cell.itemTitleLabel.text = item.name
     cell.itemDescriptionLabel.text = item.description
-    cell.numAvailableLabel.text = item.quantity.stringValue + " Available"
+    cell.numAvailableLabel.text = String(item.quantity) + " Available"
     
     if item.imageUrl.characters.count > 0 {
       if let url = URL(string: item.imageUrl) {
@@ -85,16 +85,6 @@ class ItemsTableViewController: UITableViewController, UISearchBarDelegate, Item
       }
     }
     
-    /*if item.quantity > 1 {
-     // var bidsString = item.currentPrice.map({bidPrice in "$\(bidPrice)"}).joined(separator: ", ")
-     // if bidsString.characters.count == 0 {
-     //    bidsString = "(none yet)"
-     // }
-     let bidsString = "(none yet)"
-     cell.itemDescriptionLabel.text =
-     "\(item.quantity) available! Highest \(item.quantity) bidders win. Current highest bids are \(bidsString)" +
-     "\n\n" + cell.itemDescriptionLabel.text!
-     }*/
     cell.delegate = self
     cell.item = item
     
