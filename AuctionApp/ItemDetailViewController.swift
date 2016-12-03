@@ -15,10 +15,10 @@ class ItemDetailViewController: UIViewController {
   @IBOutlet var itemTitleLabel: UILabel!
   @IBOutlet var itemImageView: UIImageView!
   @IBOutlet var currentBidLabel: UILabel!
-  //@IBOutlet var numberOfBidsLabel: UILabel!
+  @IBOutlet var numberOfBidsLabel: UILabel!
   @IBOutlet var itemDonorLabel: UILabel!
   @IBOutlet var bidderSegmentedControl: UISegmentedControl!
-  //@IBOutlet var biddingContainer: UIView!
+  @IBOutlet var biddingContainer: UIView!
   @IBOutlet var numAvailableLabel: UILabel!
   @IBOutlet var biddingStatusLabel: UILabel!
   
@@ -30,7 +30,7 @@ class ItemDetailViewController: UIViewController {
   
   func configureView() {
     if let item = self.detailItem {
-      if let itemDescriptionLabel = itemDescriptionLabel, let itemTitleLabel = itemTitleLabel, let itemImageView = itemImageView, let itemDonorLabel = itemDonorLabel, let currentBidLabel = currentBidLabel, let bidderSegmentedControl = bidderSegmentedControl, let numAvailableLabel = numAvailableLabel, let biddingStatusLabel = biddingStatusLabel {
+      if let itemDescriptionLabel = itemDescriptionLabel, let itemTitleLabel = itemTitleLabel, let itemImageView = itemImageView, let itemDonorLabel = itemDonorLabel, let currentBidLabel = currentBidLabel, let bidderSegmentedControl = bidderSegmentedControl, let numAvailableLabel = numAvailableLabel, let biddingStatusLabel = biddingStatusLabel, let _ = biddingContainer, let numberOfBidsLabel = numberOfBidsLabel {
         print("ITEM", itemDescriptionLabel, itemTitleLabel, itemDonorLabel, numAvailableLabel)
         itemDescriptionLabel.text = item.description
         itemTitleLabel.text = item.name
