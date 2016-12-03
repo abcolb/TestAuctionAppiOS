@@ -15,10 +15,10 @@ class ItemDetailViewController: UIViewController {
   @IBOutlet var itemTitleLabel: UILabel!
   @IBOutlet var itemImageView: UIImageView!
   @IBOutlet var currentBidLabel: UILabel!
-  //@IBOutlet var numberOfBidsLabel: UILabel!
+  @IBOutlet var numberOfBidsLabel: UILabel!
   @IBOutlet var itemDonorLabel: UILabel!
   @IBOutlet var bidderSegmentedControl: UISegmentedControl!
-  //@IBOutlet var headerBackground: UIView!
+  @IBOutlet var biddingContainer: UIView!
   @IBOutlet var numAvailableLabel: UILabel!
   @IBOutlet var biddingStatusLabel: UILabel!
   
@@ -30,22 +30,23 @@ class ItemDetailViewController: UIViewController {
   
   func configureView() {
     if let item = self.detailItem {
-      if let itemDescriptionLabel = itemDescriptionLabel, let itemTitleLabel = itemTitleLabel, let itemImageView = itemImageView, let itemDonorLabel = itemDonorLabel, let currentBidLabel = currentBidLabel, let bidderSegmentedControl = bidderSegmentedControl {
+      if let itemDescriptionLabel = itemDescriptionLabel, let itemTitleLabel = itemTitleLabel, let itemImageView = itemImageView, let itemDonorLabel = itemDonorLabel, let currentBidLabel = currentBidLabel, let bidderSegmentedControl = bidderSegmentedControl, let numAvailableLabel = numAvailableLabel, let numberOfBidsLabel = numberOfBidsLabel, let biddingContainer = biddingContainer, let biddingStatusLabel = biddingStatusLabel {
+        print("ITEM", itemDescriptionLabel, itemTitleLabel, itemDonorLabel, numAvailableLabel)
         itemDescriptionLabel.text = item.description
         itemTitleLabel.text = item.name
         itemDonorLabel.text = item.addedByUser
         numAvailableLabel.text = item.quantity.stringValue + " Available"
         
         if item.imageUrl.characters.count > 0 {
-          print("IMAGEURL", item.imageUrl)
+          // print("IMAGEURL", item.imageUrl)
           if let url = URL(string: item.imageUrl) {
             URLSession.shared.dataTask(with: url) { (data, response, error) in
               if (error != nil) {
-                print("Failed fetching image:", error)
+                // print("Failed fetching image:", error)
               } else if let response = response as? HTTPURLResponse, response.statusCode != 200 {
-                print("Not a proper HTTPURLResponse or statusCode")
+                // print("Not a proper HTTPURLResponse or statusCode")
               } else if (data != nil) {
-                print("SUCCESS")
+                // print("SUCCESS")
                 DispatchQueue.main.async {
                   itemImageView.image = UIImage(data: data!)
                 }
@@ -54,50 +55,59 @@ class ItemDetailViewController: UIViewController {
           }
         }
         
-        // var itemsRef = self.ref.child("items");
-        // var itemBidsRef = itemsRef.child(item.id).child("bids");
-        // itemBidsRef.on("child_added", function(snap) {
-        // itemsRef.child(snap.key()).once("value", function() {
-        //   // Render the bid on the item page.
-        //  });
-        // });
-        
-        print(item.bids)
-        
+        if (item.bids.count > 0) {
+          numberOfBidsLabel.text = "WINNING BIDS (" + String(item.bids.count) + " so far)"
+        } else {
+          numberOfBidsLabel.text = "SUGGESTED OPENING BID"
+        }
         currentBidLabel.text = "$" + item.openBid.stringValue
         
-        let attr = [NSFontAttributeName: UIFont(name: "Avenir Next", size: 24) ?? UIFont.systemFont(ofSize: 17)]
+        //bidderSegmentControl
+        
+        let attr = [NSFontAttributeName: UIFont(name: "Avenir Next", size: 14) ?? UIFont.systemFont(ofSize: 14)]
         bidderSegmentedControl.setTitleTextAttributes(attr, for: UIControlState.normal)
         bidderSegmentedControl.setTitle("+$10", forSegmentAt: 0)
         bidderSegmentedControl.setTitle("+$25", forSegmentAt: 1)
         bidderSegmentedControl.setTitle("+$50", forSegmentAt: 2)
         bidderSegmentedControl.selectedSegmentIndex = -1
         
+        //biddingStatusLabel
+        
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy/MM/dd HH:mm"
+        
+        // SMOKE TEST DATA
         // let BIDDING_OPENS = formatter.date(from: "2016/12/12 15:00")
-        let BIDDING_OPENS = formatter.date(from: "2016/11/11 15:00")
+        // let BIDDING_CLOSES = formatter.date(from: "2016/12/14 20:00")
+        // let LIVE_BIDDING_OPENS = formatter.date(from: "2016/12/14 17:00")
+        
+        // LIVE AUCTION DATA
+        // let BIDDING_OPENS = formatter.date(from: "2016/12/12 15:00")
+        // let BIDDING_CLOSES = formatter.date(from: "2016/12/14 20:00")
+        // let LIVE_BIDDING_OPENS = formatter.date(from: "2016/12/14 17:00")
+        
+        let BIDDING_OPENS = formatter.date(from: "2016/11/12 15:00")
         let BIDDING_CLOSES = formatter.date(from: "2016/12/14 20:00")
         let LIVE_BIDDING_OPENS = formatter.date(from: "2016/12/14 17:00")
         
         let now = NSDate()
         
         if (now.compare(BIDDING_CLOSES!) == ComparisonResult.orderedDescending) {
-          // cell.bidNowButton.isHidden = true
+          bidderSegmentedControl.isEnabled = false
           biddingStatusLabel.text = ("Sorry, bidding has closed").uppercased()
         }
         if (item.isLive) {
           if (now.compare(LIVE_BIDDING_OPENS!) == ComparisonResult.orderedDescending) {
             biddingStatusLabel.text = ("Bidding closes " + formatter.string(from: BIDDING_CLOSES!)).uppercased()
           } else {
-            // cell.bidNowButton.isHidden = true
+            bidderSegmentedControl.isEnabled = false
             biddingStatusLabel.text = ("Bidding opens " + formatter.string(from: LIVE_BIDDING_OPENS!)).uppercased()
           }
         } else {
           if (now.compare(BIDDING_OPENS!) == ComparisonResult.orderedDescending) {
             biddingStatusLabel.text = ("Bidding closes " + formatter.string(from: BIDDING_CLOSES!)).uppercased()
           } else {
-            // cell.bidNowButton.isHidden = true
+            bidderSegmentedControl.isEnabled = false
             biddingStatusLabel.text = ("Bidding opens " + formatter.string(from: BIDDING_OPENS!)).uppercased()
           }
         }
@@ -155,7 +165,7 @@ class ItemDetailViewController: UIViewController {
     if let userEmail = user?.email {
       let bidData = ["email": userEmail, "name": "A HubSpotter", "amount": 50, "item": 0] as [String : Any]
       let postRef = self.ref.child("bids").childByAutoId()
-      var bidId = postRef.key
+      let bidId = postRef.key
       postRef.setValue(bidData)
       self.ref.child("/items/" + item.id + "/bids/" + bidId).setValue(true)
       // self.ref.child("/users/" + comment.author + "/bids/" + name).set(true);
