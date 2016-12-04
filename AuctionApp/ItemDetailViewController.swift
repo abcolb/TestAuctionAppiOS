@@ -141,7 +141,7 @@ class ItemDetailViewController: UIViewController {
   
   func alertBid() {
     if let item = self.detailItem {
-      let alertController = UIAlertController(title: "Submit bid?", message: "Bid $" + String(item.openBid) + " on " + item.name, preferredStyle: .alert)
+      let alertController = UIAlertController(title: "Submit bid?", message: "Bid $" + String(increments[bidderSegmentedControl.selectedSegmentIndex]) + " on " + item.name, preferredStyle: .alert)
       
       let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
         // ...
