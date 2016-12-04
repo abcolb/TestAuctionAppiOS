@@ -134,9 +134,35 @@ class ItemDetailViewController: UIViewController {
         alertBid()
       case 2:
         alertBid()
+      case 3:
+        alertCustomBid()
       default:
         break;
     }
+  }
+  
+  func alertCustomBid() {
+    let alert = UIAlertController(title: "Custom bid", message: "Enter custom bid amount", preferredStyle: .alert)
+    
+    alert.addTextField { textField in
+      textField.keyboardType = UIKeyboardType.numberPad
+      textField.placeholder = "Minimum bid: $" + String(describing: self.detailItem?.getPrice())
+    }
+  
+    let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
+      self.bidderSegmentedControl.selectedSegmentIndex = -1
+    }
+    
+    let saveAction = UIAlertAction(title: "OK", style: .default) { (action) in
+      let input = alert.textFields![0].text ?? "0"
+      self.increments.append(Int(input)!)
+      self.alertBid()
+    }
+    
+    alert.addAction(saveAction)
+    alert.addAction(cancelAction)
+    
+    self.present(alert, animated: true)
   }
   
   func alertBid() {
@@ -144,24 +170,24 @@ class ItemDetailViewController: UIViewController {
       let alertController = UIAlertController(title: "Submit bid?", message: "Bid $" + String(increments[bidderSegmentedControl.selectedSegmentIndex]) + " on " + item.name, preferredStyle: .alert)
       
       let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
-        // ...
+        self.bidderSegmentedControl.selectedSegmentIndex = -1
       }
-      alertController.addAction(cancelAction)
       
       let OKAction = UIAlertAction(title: "OK", style: .default) { (action) in
-        self.bidOn(item: item, amount: 50)
+        print("OK")
+        self.bidOn(item: item, amount: self.increments[self.bidderSegmentedControl.selectedSegmentIndex])
+        self.bidderSegmentedControl.selectedSegmentIndex = -1
       }
+      
+      alertController.addAction(cancelAction)
       alertController.addAction(OKAction)
       
-      self.present(alertController, animated: true) {
-        // ...
-      }
+      self.present(alertController, animated: true)
     }
   }
   
   func bidOn(item:Item, amount: Int){
     let user = FIRAuth.auth()?.currentUser;
-    print(user!.uid)
     
     if let userEmail = user?.email {
       let bidData = ["email": userEmail, "name": "A HubSpotter", "amount": 50, "item": 0] as [String : Any]
