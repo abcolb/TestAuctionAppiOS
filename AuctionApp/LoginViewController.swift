@@ -2,6 +2,7 @@ import UIKit
 
 class LoginViewController: UIViewController {
   
+  // let ref = FIRDatabase.database().reference()
   let loginToList = "LoginToList"
   
   @IBOutlet weak var emailTextField: UITextField!
@@ -39,11 +40,13 @@ class LoginViewController: UIViewController {
   @IBAction func signUpDidTouch(_ sender: AnyObject) {
     guard let email = emailTextField.text, let password = passwordTextField.text else { return }
     FIRAuth.auth()?.createUser(withEmail: email, password: password) { (user, error) in
-     if let error = error {
-      print(error.localizedDescription)
-      return
-     }
-     self.setDisplayName(user!)
+      if let error = error {
+        print(error.localizedDescription)
+        return
+      }
+      let userData = ["email": email, "name": "A HubSpotter"] as [String : String]
+      // self.ref.child("users").child(email).setValue(userData)
+      self.setDisplayName(user!)
     }
     print("click")
   }

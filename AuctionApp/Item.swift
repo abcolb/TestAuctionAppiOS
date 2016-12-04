@@ -60,5 +60,36 @@ struct Item {
       "bids": bids
     ]
   }
+  
+  func getPrice() -> Int {
+    if (bids.count > 0){
+      return 500 //new Bid(bids.first
+    }
+    return self.openBid
+  }
+  
+  func getBidType() -> String {
+    let currentPrice = self.getPrice()
+    if (currentPrice < 50) {
+      return "SMALL"
+    } else if (currentPrice < 100) {
+      return "MEDIUM"
+    } else {
+      return "LARGE"
+    }
+  }
+  
+  func getIncrements() -> [Int] {
+    
+    let BIDDING_INCREMENTS : [String: [Int]] = [
+      "SMALL": [1, 5, 10],
+      "MEDIUM": [5, 10, 25],
+      "LARGE": [10, 25, 50]
+    ]
+    
+    let priceIncrements = BIDDING_INCREMENTS[self.getBidType()]
+
+    return [priceIncrements![0] + self.getPrice(), priceIncrements![1] + self.getPrice(), priceIncrements![2] + self.getPrice()]
+  }
 
 }

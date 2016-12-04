@@ -10,6 +10,7 @@ import Foundation
 class ItemDetailViewController: UIViewController {
   
   let ref = FIRDatabase.database().reference()
+  var increments: [Int] = []
   
   @IBOutlet var itemDescriptionLabel: UILabel!
   @IBOutlet var itemTitleLabel: UILabel!
@@ -62,19 +63,14 @@ class ItemDetailViewController: UIViewController {
         }
         currentBidLabel.text = "$" + String(item.openBid)
         
-        let BIDDING_INCREMENTS : [String: [Int]] = [
-          "SMALL": [1, 5, 10],
-          "MEDIUM": [5, 10, 25],
-          "LARGE": [10, 25, 50]
-        ]
-        
         //bidderSegmentControl
+        increments = item.getIncrements()
         
         let attr = [NSFontAttributeName: UIFont(name: "Avenir Next", size: 14) ?? UIFont.systemFont(ofSize: 14)]
         bidderSegmentedControl.setTitleTextAttributes(attr, for: UIControlState.normal)
-        bidderSegmentedControl.setTitle("$" + String(item.openBid + BIDDING_INCREMENTS["SMALL"]![0]), forSegmentAt: 0)
-        bidderSegmentedControl.setTitle("$" + String(item.openBid + BIDDING_INCREMENTS["SMALL"]![1]), forSegmentAt: 1)
-        bidderSegmentedControl.setTitle("$" + String(item.openBid + BIDDING_INCREMENTS["SMALL"]![2]), forSegmentAt: 2)
+        bidderSegmentedControl.setTitle("$" + String(increments[0]), forSegmentAt: 0)
+        bidderSegmentedControl.setTitle("$" + String(increments[1]), forSegmentAt: 1)
+        bidderSegmentedControl.setTitle("$" + String(increments[2]), forSegmentAt: 2)
         bidderSegmentedControl.selectedSegmentIndex = -1
         
         //biddingStatusLabel
@@ -163,10 +159,9 @@ class ItemDetailViewController: UIViewController {
     }
   }
   
-  //func bidOn(item:Item, amount: Int, completion: (Bool, errorCode: String) -> ()){
-  
   func bidOn(item:Item, amount: Int){
     let user = FIRAuth.auth()?.currentUser;
+    print(user!.uid)
     
     if let userEmail = user?.email {
       let bidData = ["email": userEmail, "name": "A HubSpotter", "amount": 50, "item": 0] as [String : Any]
@@ -174,54 +169,12 @@ class ItemDetailViewController: UIViewController {
       let bidId = postRef.key
       postRef.setValue(bidData)
       self.ref.child("/items/" + item.id + "/bids/" + bidId).setValue(true)
-      // self.ref.child("/users/" + comment.author + "/bids/" + name).set(true);
-
-      /*print("BIDS", item.bids)
-      print("ALL BIDS", item.bids.add(["email": userEmail, "name": "A HubSpotter", "amount": 50]))
-      
-
-      id.set(comment, function(err) {
-        if (!err) {
-          var name = id.key();
-          root.child("/links/" + comment.link + "/comments/" + name).set(true);
-          root.child("/users/" + comment.author + "/comments/" + name).set(true);
-        }
-      });*/
-      
+      self.ref.child("/users/" + user!.uid + "/item-bids/" + item.id).setValue(true)
       
       /*item.ref?.updateChildValues([
         "bids": item.bids.add(["email": userEmail, "name": "A HubSpotter", "amount": 50]).copy()
       ])*/
     }
-    
-    /*Bid(email: user.email, name: user.username, amount: amount, itemId: item.objectId)
-      .saveInBackgroundWithBlock { (success, error) -> Void in
-        
-        if error != nil {
-          
-          if let errorString:String = error.userInfo?["error"] as? String{
-            completion(false, errorCode: errorString)
-          }else{
-            completion(false, errorCode: "")
-          }
-          return
-        }
-        
-        let newItemQuery: PFQuery = Item.query()
-        newItemQuery.whereKey("objectId", equalTo: item.objectId)
-        newItemQuery.getFirstObjectInBackgroundWithBlock({ (item, error) -> Void in
-          
-          if let itemUW = item as? Item {
-            self.replaceItem(itemUW)
-          }
-          completion(true, errorCode: "")
-        })
-        
-        let channel = "a\(item.objectId)"
-        PFPush.subscribeToChannelInBackground(channel, block: { (success, error) -> Void in
-          
-        })
-    }*/
   }
 }
 
