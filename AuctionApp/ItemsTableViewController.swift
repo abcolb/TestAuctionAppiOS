@@ -88,81 +88,17 @@ class ItemsTableViewController: UITableViewController, UISearchBarDelegate, Item
     cell.delegate = self
     cell.item = item
     
-    var price: Int?
-    var lowPrice: Int?
-    
-    price = 50 //item.price //item.currentPrice.first
-    
-    /*switch (item.winnerType) {
-     case .single:
-     price = item.currentPrice.first
-     cell.availLabel.text = "1 Available"
-     case .multiple:
-     price = item.currentPrice.first
-     lowPrice = item.currentPrice.last
-     cell.availLabel.text = "\(item.quantity) Available"
-     }*/
-    
-    //let bidString = "Bid" // (item.numberOfBids == 1) ? "Bid":"Bids"
-    //cell.numberOfBidsLabel.text = "1 \(bidString)" // "\(item.numberOfBids) \(bidString)"
-    
-    /*if let topBid = price {
-     if let lowBid = lowPrice{
-     if item.numberOfBids > 1{
-     cell.currentBidLabel.text = "$\(lowBid)-\(topBid)"
-     }else{
-     cell.currentBidLabel.text = "$\(topBid)"
-     }
-     }else{
-     cell.currentBidLabel.text = "$\(topBid)"
-     }
-     }else{
-     cell.currentBidLabel.text = "$\(item.price)"
-     }*/
-    //cell.currentBidLabel.text = "$50"
-    
-    //cell.setWinning()
-    
-    /*if !item.currentWinners.isEmpty { // && item.hasBid{
-     cell.setWinning()
-     /*if item.isWinning{
-     cell.setWinning()
-     }else{
-     cell.setOutbid()
-     }*/
-     }else{
-     cell.setDefault()
-     }*/
-    
-    let formatter = DateFormatter()
-    formatter.dateFormat = "yyyy/MM/dd HH:mm"
-    // SMOKE TEST DATA
-    // let BIDDING_OPENS = formatter.date(from: "2016/12/12 15:00")
-    // let BIDDING_CLOSES = formatter.date(from: "2016/12/14 20:00")
-    // let LIVE_BIDDING_OPENS = formatter.date(from: "2016/12/14 17:00")
-    
-    // LIVE AUCTION DATA
-    // let BIDDING_OPENS = formatter.date(from: "2016/12/12 15:00")
-    // let BIDDING_CLOSES = formatter.date(from: "2016/12/14 20:00")
-    // let LIVE_BIDDING_OPENS = formatter.date(from: "2016/12/14 17:00")
-    
-    let BIDDING_OPENS = formatter.date(from: "2016/11/12 15:00")
-    let BIDDING_CLOSES = formatter.date(from: "2016/12/14 20:00")
-    let LIVE_BIDDING_OPENS = formatter.date(from: "2016/12/14 17:00")
-    
-    let now = NSDate()
-    
-    if (now.compare(BIDDING_CLOSES!) == ComparisonResult.orderedDescending) {
-      cell.bidNowButton.isHidden = true
-    }
-    if (item.isLive) {
-      if (now.compare(LIVE_BIDDING_OPENS!) != ComparisonResult.orderedDescending) {
-        cell.bidNowButton.isHidden = true
-      }
-    } else {
-      if (now.compare(BIDDING_OPENS!) != ComparisonResult.orderedDescending) {
-        cell.bidNowButton.isHidden = true
-      }
+    switch (item.getBidStatus()) {
+      case "WINNING":
+        cell.setWinning()
+      case "OUTBID":
+        cell.setOutbid()
+      case "SHOULD_BID":
+        cell.setShouldBid()
+      case "NO_BIDS":
+        cell.setNoBids()
+      default:
+        break;
     }
     
     return cell

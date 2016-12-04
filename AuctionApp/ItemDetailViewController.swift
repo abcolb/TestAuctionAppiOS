@@ -146,7 +146,7 @@ class ItemDetailViewController: UIViewController {
     
     alert.addTextField { textField in
       textField.keyboardType = UIKeyboardType.numberPad
-      textField.placeholder = "Minimum bid: $" + String(describing: self.detailItem?.getPrice())
+      textField.placeholder = "Minimum bid: $" + String(self.detailItem!.getPrice())
     }
   
     let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
