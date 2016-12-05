@@ -10,10 +10,10 @@ struct Item {
   let quantity: Int
   let openBid: Int
   let isLive: Bool
-  let bids: [String]
+  var bids: [Bid] = []
   let ref: FIRDatabaseReference?
 
-  init(name: String, addedByUser: String, description: String, imageUrl: String, quantity: Int, openBid: Int, isLive: Bool, bids: [String], key: String = "") {
+  init(name: String, addedByUser: String, description: String, imageUrl: String, quantity: Int, openBid: Int, isLive: Bool, bids: [Bid], key: String = "") {
     self.id = key
     self.name = name
     self.addedByUser = addedByUser
@@ -36,14 +36,25 @@ struct Item {
     quantity = snapshotValue["qty"] as! Int
     openBid = snapshotValue["openbid"] as! Int
     isLive = snapshotValue["islive"] as! Bool
-    var bidsFound : [String] = []
     if snapshotValue["bids"] != nil {
-      let result = snapshotValue["bids"] as! NSMutableDictionary
+      let result = snapshotValue["bids"] as! NSDictionary
       for bid in result {
-        bidsFound.append(bid.key as! String)
+        print("BID KEY!", bid)
+        var bidsFound : [Bid] = []
+        FIRDatabase.database().reference().child("bids").child(bid.key as! String).observe(.value, with: { (snapshot) in
+          let newBid = Bid(snapshot: snapshot)
+          print("BID!", String(describing: newBid))
+          bidsFound.append(newBid)
+          //let value = snapshot.value as? NSDictionary
+          //let username = value?["username"] as? String ?? ""
+          //let user = User.init(username: username)
+        }) { (error) in
+          print(error.localizedDescription)
+        }
+        bids = bidsFound
+        print("BIDS!", String(describing: bids))
       }
     }
-    bids = bidsFound
     ref = snapshot.ref
   }
 
@@ -128,8 +139,7 @@ struct Item {
   
   func getIsUserWinning() -> Bool {
     //item.bids.first.email == user.email) {
-    
-    return false
+    return bids.count > 0
   }
   
   func getBidStatus() -> String {
@@ -181,11 +191,15 @@ struct Item {
       return "NO_BIDS"
     } else if (false) {
       return "OUTBID"
-    } else if (true) {
-      return "SHOULD_BID"
-    } else {
+    } else if (getIsUserWinning()) {
       return "WINNING"
+    } else {
+      return "SHOULD_BID"
     }
+  }
+  
+  func getWinningBidsString() -> String {
+    return "$50, $51, $52"
   }
   
 }

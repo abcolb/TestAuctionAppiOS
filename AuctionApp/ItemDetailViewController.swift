@@ -58,15 +58,17 @@ class ItemDetailViewController: UIViewController {
         
         if (item.bids.count > 0) {
           numberOfBidsLabel.text = "WINNING BIDS (" + String(item.bids.count) + " so far)"
+          currentBidLabel.text = item.getWinningBidsString()
         } else {
           numberOfBidsLabel.text = "SUGGESTED OPENING BID"
+          currentBidLabel.text = "$" + String(item.openBid)
+          currentBidLabel.textColor = UIColor(red:0.26, green:0.36, blue:0.46, alpha:1.0)
         }
-        currentBidLabel.text = "$" + String(item.openBid)
         
         //bidderSegmentControl
         increments = item.getIncrements()
         
-        let attr = [NSFontAttributeName: UIFont(name: "Avenir Next", size: 14) ?? UIFont.systemFont(ofSize: 14)]
+        let attr = [NSFontAttributeName: UIFont(name: "AvenirNext-Regular", size: 18) ?? UIFont.systemFont(ofSize: 18)]
         bidderSegmentedControl.setTitleTextAttributes(attr, for: UIControlState.normal)
         bidderSegmentedControl.setTitle("$" + String(increments[0]), forSegmentAt: 0)
         bidderSegmentedControl.setTitle("$" + String(increments[1]), forSegmentAt: 1)
@@ -96,6 +98,7 @@ class ItemDetailViewController: UIViewController {
         
         if (now.compare(BIDDING_CLOSES!) == ComparisonResult.orderedDescending) {
           bidderSegmentedControl.isEnabled = false
+          bidderSegmentedControl.tintColor = UIColor(red:0.26, green:0.36, blue:0.46, alpha:1.0)
           biddingStatusLabel.text = ("Sorry, bidding has closed").uppercased()
         }
         if (item.isLive) {
@@ -103,6 +106,7 @@ class ItemDetailViewController: UIViewController {
             biddingStatusLabel.text = ("Bidding closes " + formatter.string(from: BIDDING_CLOSES!)).uppercased()
           } else {
             bidderSegmentedControl.isEnabled = false
+            bidderSegmentedControl.tintColor = UIColor(red:0.26, green:0.36, blue:0.46, alpha:1.0)
             biddingStatusLabel.text = ("Bidding opens " + formatter.string(from: LIVE_BIDDING_OPENS!)).uppercased()
           }
         } else {
@@ -110,6 +114,7 @@ class ItemDetailViewController: UIViewController {
             biddingStatusLabel.text = ("Bidding closes " + formatter.string(from: BIDDING_CLOSES!)).uppercased()
           } else {
             bidderSegmentedControl.isEnabled = false
+            bidderSegmentedControl.tintColor = UIColor(red:0.26, green:0.36, blue:0.46, alpha:1.0)
             biddingStatusLabel.text = ("Bidding opens " + formatter.string(from: BIDDING_OPENS!)).uppercased()
           }
         }
@@ -190,10 +195,10 @@ class ItemDetailViewController: UIViewController {
     let user = FIRAuth.auth()?.currentUser;
     
     if let userEmail = user?.email {
-      let bidData = ["email": userEmail, "name": "A HubSpotter", "amount": 50, "item": 0] as [String : Any]
       let postRef = self.ref.child("bids").childByAutoId()
       let bidId = postRef.key
-      postRef.setValue(bidData)
+      postRef.setValue(["email": userEmail, "name": "A HubSpotter", "amount": amount, "item": item.id] as [String : Any])
+      self.ref.child("/item-bids/" + item.id + "/" + bidId).setValue(["email": userEmail, "name": "A HubSpotter", "amount": amount] as [String : Any])
       self.ref.child("/items/" + item.id + "/bids/" + bidId).setValue(true)
       self.ref.child("/users/" + user!.uid + "/item-bids/" + item.id).setValue(true)
       
