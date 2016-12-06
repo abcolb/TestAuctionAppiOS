@@ -265,14 +265,14 @@
 		};
 		891261811DF67D5900375624 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 8;
 			files = (
 			);
 			inputPaths = (
 			);
 			outputPaths = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
+			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
 			shellScript = "JSON_FILE=${SRCROOT}/*****/ServiceAccount.json\nGOOGLE_APP_ID=1:1:739104039081:ios:a209aa3ef75ffe85\n\n# Replace the /Path/To/ServiceAccount.json with the path to the key you just downloaded\n\"${PODS_ROOT}\"/FirebaseCrash/upload-sym ${SRCROOT}/Resources/hsauction-18898-firebase-crashreporting-3nry3-48a6a7396c.json";
 		};

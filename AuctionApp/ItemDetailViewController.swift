@@ -35,11 +35,11 @@ class ItemDetailViewController: UIViewController {
         print("ITEM", itemDescriptionLabel, itemTitleLabel, itemDonorLabel, numAvailableLabel)
         itemDescriptionLabel.text = item.description
         itemTitleLabel.text = item.name
+        itemTitleLabel.sizeToFit()
         itemDonorLabel.text = item.addedByUser
         numAvailableLabel.text = String(item.quantity) + " Available"
         
         if item.imageUrl.characters.count > 0 {
-          // print("IMAGEURL", item.imageUrl)
           if let url = URL(string: item.imageUrl) {
             URLSession.shared.dataTask(with: url) { (data, response, error) in
               if (error != nil) {
@@ -81,20 +81,17 @@ class ItemDetailViewController: UIViewController {
         formatter.dateFormat = "yyyy/MM/dd HH:mm"
         
         // SMOKE TEST DATA
-        // let BIDDING_OPENS = formatter.date(from: "2016/12/12 15:00")
-        // let BIDDING_CLOSES = formatter.date(from: "2016/12/14 20:00")
-        // let LIVE_BIDDING_OPENS = formatter.date(from: "2016/12/14 17:00")
+        let BIDDING_OPENS = formatter.date(from: "2016/12/06 12:00")
+        let BIDDING_CLOSES = formatter.date(from: "2016/12/06 18:00")
+        let LIVE_BIDDING_OPENS = formatter.date(from: "2016/12/06 15:00")
         
         // LIVE AUCTION DATA
         // let BIDDING_OPENS = formatter.date(from: "2016/12/12 15:00")
         // let BIDDING_CLOSES = formatter.date(from: "2016/12/14 20:00")
         // let LIVE_BIDDING_OPENS = formatter.date(from: "2016/12/14 17:00")
         
-        let BIDDING_OPENS = formatter.date(from: "2016/11/12 15:00")
-        let BIDDING_CLOSES = formatter.date(from: "2016/12/14 20:00")
-        let LIVE_BIDDING_OPENS = formatter.date(from: "2016/12/14 17:00")
-        
         let now = NSDate()
+        formatter.dateFormat = "MM/dd HH:mm"
         
         if (now.compare(BIDDING_CLOSES!) == ComparisonResult.orderedDescending) {
           bidderSegmentedControl.isEnabled = false
@@ -200,7 +197,7 @@ class ItemDetailViewController: UIViewController {
       postRef.setValue(["user": user!.uid, "amount": amount, "item": item.id] as [String : Any])
       self.ref.child("/item-bids/" + item.id + "/" + bidId).setValue(["user": user!.uid, "amount": amount] as [String : Any])
       self.ref.child("/items/" + item.id + "/bids/" + bidId).setValue(true)
-      self.ref.child("/users/" + user!.uid + "/item-bids/" + item.id).setValue(true)
+      self.ref.child("/users/" + user!.uid + "/item-bids/" + item.id).child(bidId).setValue(true)
       
       /*item.ref?.updateChildValues([
         "bids": item.bids.add(["email": userEmail, "name": "A HubSpotter", "amount": 50]).copy()
