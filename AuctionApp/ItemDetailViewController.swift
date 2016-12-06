@@ -197,8 +197,8 @@ class ItemDetailViewController: UIViewController {
     if let userEmail = user?.email {
       let postRef = self.ref.child("bids").childByAutoId()
       let bidId = postRef.key
-      postRef.setValue(["userid": user!.uid, "amount": amount, "item": item.id] as [String : Any])
-      self.ref.child("/item-bids/" + item.id + "/" + bidId).setValue(["userid": user!.uid, "amount": amount] as [String : Any])
+      postRef.setValue(["user": user!.uid, "amount": amount, "item": item.id] as [String : Any])
+      self.ref.child("/item-bids/" + item.id + "/" + bidId).setValue(["user": user!.uid, "amount": amount] as [String : Any])
       self.ref.child("/items/" + item.id + "/bids/" + bidId).setValue(true)
       self.ref.child("/users/" + user!.uid + "/item-bids/" + item.id).setValue(true)
       
