@@ -92,9 +92,8 @@ struct Item {
       "LARGE": [10, 25, 50]
     ]
     
-    let priceIncrements = BIDDING_INCREMENTS[self.getBidType()]
-
-    return [priceIncrements![0] + self.getPrice(), priceIncrements![1] + self.getPrice(), priceIncrements![2] + self.getPrice()]
+    let priceIncrements = BIDDING_INCREMENTS[self.getBidType()]!
+    return priceIncrements.map{$0 + self.getPrice()}
   }
 
   func getIsBiddingOpen() -> Bool {
