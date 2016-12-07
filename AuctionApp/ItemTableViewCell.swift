@@ -6,12 +6,6 @@
 import UIKit
 import Foundation
 
-protocol ItemTableViewCellDelegate {
-  
-  func cellDidPressBid(_ item: Item)
-  
-}
-
 class ItemTableViewCell: UITableViewCell {
   
   @IBOutlet var cardContainer: UIView!
@@ -23,7 +17,6 @@ class ItemTableViewCell: UITableViewCell {
   @IBOutlet var suggestedActionLabel: UILabel!
   var alreadyLoaded: Bool!
   
-  var delegate: ItemTableViewCellDelegate?
   var item: Item?
   override func awakeFromNib() {
     super.awakeFromNib()

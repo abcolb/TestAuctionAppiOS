@@ -56,8 +56,8 @@ class ItemDetailViewController: UIViewController {
           }
         }
         
-        if (item.bids.count > 0) {
-          numberOfBidsLabel.text = "WINNING BIDS (" + String(item.bids.count) + " total bids)"
+        if (item.numBids > 0) {
+          numberOfBidsLabel.text = "WINNING BIDS (" + String(item.numBids) + " total bids)"
           currentBidLabel.text = item.getWinningBidsString()
         } else {
           numberOfBidsLabel.text = "SUGGESTED OPENING BID"
@@ -81,9 +81,10 @@ class ItemDetailViewController: UIViewController {
         formatter.dateFormat = "yyyy/MM/dd HH:mm"
         
         // SMOKE TEST DATA
+        //let BIDDING_OPENS = formatter.date(from: "2016/12/07 12:00")
         let BIDDING_OPENS = formatter.date(from: "2016/12/06 12:00")
-        let BIDDING_CLOSES = formatter.date(from: "2016/12/06 18:00")
-        let LIVE_BIDDING_OPENS = formatter.date(from: "2016/12/06 15:00")
+        let BIDDING_CLOSES = formatter.date(from: "2016/12/07 18:00")
+        let LIVE_BIDDING_OPENS = formatter.date(from: "2016/12/07 15:00")
         
         // LIVE AUCTION DATA
         // let BIDDING_OPENS = formatter.date(from: "2016/12/12 15:00")

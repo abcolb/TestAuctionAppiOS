@@ -1,17 +1,16 @@
 import UIKit
 
-class ItemsTableViewController: UITableViewController, ItemTableViewCellDelegate {
+class ItemsTableViewController: UITableViewController {
 
   var items: [Item] = []
   var sizingCell: ItemTableViewCell?
-  let ref = FIRDatabase.database().reference(withPath: "items")
+  let ref = FIRDatabase.database().reference()
   var itemDetailViewController: ItemDetailViewController? = nil
   
   func logOutPressed(_ sender: UIButton) {
     let firebaseAuth = FIRAuth.auth()
     do {
       try firebaseAuth?.signOut()
-      // AppState.sharedInstance.signedIn = false
       dismiss(animated: true, completion: nil)
     } catch let signOutError as NSError {
       print ("Error signing out:", signOutError.localizedDescription)
@@ -20,18 +19,49 @@ class ItemsTableViewController: UITableViewController, ItemTableViewCellDelegate
   
   override func viewDidLoad() {
     super.viewDidLoad()
-
-    ref.observe(.value, with: { snapshot in
-      var newItems: [Item] = []
-      for item in snapshot.children {
-        let auctionItem = Item(snapshot: item as! FIRDataSnapshot)
-        newItems.append(auctionItem)
-      }
-      self.items = newItems
-      // iquery?.addAscendingOrder("closetime")
-      // query?.addAscendingOrder("name")
-      self.tableView.reloadData()
-    })
+    
+    let user = FIRAuth.auth()?.currentUser
+    
+    if (user != nil) {
+      //let userID = user?.uid
+      
+      ref.child("items").observe(.value, with: { snapshot in
+        var newItems: [Item] = []
+        for item in snapshot.children {
+          let auctionItem = Item(snapshot: item as! FIRDataSnapshot)
+          newItems.append(auctionItem)
+          
+          /*var userIsWinning = false
+          var userIsOutbid = false
+          var winningBids: [Bid] = [];
+          let winningBidsQuery = self.ref.child("item-bids").child(auctionItem.id).queryLimited(toLast: UInt(auctionItem.quantity));
+          winningBidsQuery.observeSingleEvent(of: .value, with: { (snapshot) in
+            for child in snapshot.children {
+              let bid = Bid(snapshot: child as! FIRDataSnapshot)
+              winningBids.append(bid)
+              if (bid.user == userID){
+                item.setUserIsWinning(true)
+              }
+            }
+            if (winningBids.count > 0) {
+              self.ref.child("users").child(userID!).child("item-bids").child(auctionItem.id).observeSingleEvent(of: .value, with: { (snapshot) in
+                for _ in snapshot.children {
+                  if (!userIsWinning) {
+                    userIsOutbid = true;
+                  }
+                }
+              })
+            }
+          }) { (error) in
+            print(error.localizedDescription)
+          }*/
+        }
+        self.items = newItems
+        // iquery?.addAscendingOrder("closetime")
+        // query?.addAscendingOrder("name")
+        self.tableView.reloadData()
+      })
+    }
 
     tableView.allowsMultipleSelectionDuringEditing = false
     
@@ -80,8 +110,6 @@ class ItemsTableViewController: UITableViewController, ItemTableViewCellDelegate
         }.resume()
       }
     }
-    
-    cell.delegate = self
     cell.item = item
     
     switch (item.getBidStatus()) {
@@ -127,18 +155,5 @@ class ItemsTableViewController: UITableViewController, ItemTableViewCellDelegate
       }
     }
   }
-
-  // kill this?
-  func cellDidPressBid(_ item: Item) {
-    
-    /*let bidVC = UIStoryboard(name: "Main", bundle: Bundle.main).instantiateViewController(withIdentifier: "BiddingViewController") as? BiddingViewController
-    if let biddingVC = bidVC {
-      biddingVC.delegate = self
-      biddingVC.item = item
-      addChildViewController(biddingVC)
-      view.addSubview(biddingVC.view)
-      biddingVC.didMove(toParentViewController: self)
-    }*/
-    print(item)
-  }
 }
+

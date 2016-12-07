@@ -10,10 +10,12 @@ struct Item {
   let quantity: Int
   let openBid: Int
   let isLive: Bool
-  var bids: [Bid] = []
-  let ref: FIRDatabaseReference?
+  var numBids: Int
+  var winningBids: [Bid] = []
+  var userIsWinning: Bool
+  var userIsOutbid: Bool
 
-  init(name: String, addedByUser: String, description: String, imageUrl: String, quantity: Int, openBid: Int, isLive: Bool, bids: [Bid], key: String = "") {
+  init(name: String, addedByUser: String, description: String, imageUrl: String, quantity: Int, openBid: Int, isLive: Bool, numBids: Int, key: String = "") {
     self.id = key
     self.name = name
     self.addedByUser = addedByUser
@@ -22,8 +24,10 @@ struct Item {
     self.quantity = quantity
     self.openBid = openBid
     self.isLive = isLive
-    self.bids = bids
-    self.ref = nil
+    self.numBids = numBids
+    self.winningBids = []
+    self.userIsWinning = false
+    self.userIsOutbid = false
   }
 
   init(snapshot: FIRDataSnapshot) {
@@ -36,45 +40,35 @@ struct Item {
     quantity = snapshotValue["qty"] as! Int
     openBid = snapshotValue["openbid"] as! Int
     isLive = snapshotValue["islive"] as! Bool
+    
+    userIsOutbid = false
+    userIsWinning = false
+    
     if snapshotValue["bids"] != nil {
-      let result = snapshotValue["bids"] as! NSDictionary
-      for bid in result {
-        print("BID KEY!", bid)
-        var bidsFound : [Bid] = []
-        FIRDatabase.database().reference().child("bids").child(bid.key as! String).observe(.value, with: { (snapshot) in
-          let newBid = Bid(snapshot: snapshot)
-          print("BID!", String(describing: newBid))
-          bidsFound.append(newBid)
-          //let value = snapshot.value as? NSDictionary
-          //let username = value?["username"] as? String ?? ""
-          //let user = User.init(username: username)
-        }) { (error) in
-          print(error.localizedDescription)
-        }
-        bids = bidsFound
-        print("BIDS!", String(describing: bids))
-      }
+      numBids = (snapshotValue["bids"] as! NSDictionary).count
+    } else {
+      numBids = 0
     }
-    ref = snapshot.ref
-  }
-
-  func toAnyObject() -> Any {
-    return [
-      "name": name,
-      "addedByUser": addedByUser,
-      "description": description,
-      "imageUrl": imageUrl,
-      "quantity": quantity,
-      "openBid": openBid,
-      "quantity": quantity,
-      "isLive": isLive,
-      "bids": bids
-    ]
+  
+    var winningBidsFound: [Bid] = []
+    if numBids > 0 {
+      let winningBidsQuery = FIRDatabase.database().reference().child("item-bids").child(id).queryLimited(toLast: UInt(quantity));
+      winningBidsQuery.observeSingleEvent(of: .value, with: { (snapshot) in
+        for child in snapshot.children {
+          let bid = Bid(snapshot: child as! FIRDataSnapshot)
+          print("BID", bid)
+          winningBidsFound.append(bid)
+        }
+      })
+      winningBids = winningBidsFound;
+    } else {
+      winningBids = winningBidsFound;
+    }
   }
   
   func getPrice() -> Int {
-    if (bids.count > 0){
-      return 500 //new Bid(bids.first
+    if (numBids > 0) {
+      return 500;
     }
     return self.openBid
   }
@@ -107,18 +101,15 @@ struct Item {
     let formatter = DateFormatter()
     formatter.dateFormat = "yyyy/MM/dd HH:mm"
     // SMOKE TEST DATA
-    // let BIDDING_OPENS = formatter.date(from: "2016/12/12 15:00")
-    // let BIDDING_CLOSES = formatter.date(from: "2016/12/14 20:00")
-    // let LIVE_BIDDING_OPENS = formatter.date(from: "2016/12/14 17:00")
+    // let BIDDING_OPENS = formatter.date(from: "2016/12/7 15:00")
+    let BIDDING_OPENS = formatter.date(from: "2016/12/6 15:00")
+    let BIDDING_CLOSES = formatter.date(from: "2016/12/7 20:00")
+    let LIVE_BIDDING_OPENS = formatter.date(from: "2016/12/7 17:00")
     
     // LIVE AUCTION DATA
     // let BIDDING_OPENS = formatter.date(from: "2016/12/12 15:00")
     // let BIDDING_CLOSES = formatter.date(from: "2016/12/14 20:00")
     // let LIVE_BIDDING_OPENS = formatter.date(from: "2016/12/14 17:00")
-    
-    let BIDDING_OPENS = formatter.date(from: "2016/11/12 15:00")
-    let BIDDING_CLOSES = formatter.date(from: "2016/12/14 20:00")
-    let LIVE_BIDDING_OPENS = formatter.date(from: "2016/12/14 17:00")
     
     let now = NSDate()
     
@@ -139,53 +130,10 @@ struct Item {
   
   func getIsUserWinning() -> Bool {
     //item.bids.first.email == user.email) {
-    return bids.count > 0
+    return winningBids.count > 0 //numBids > 0
   }
   
   func getBidStatus() -> String {
-    
-    //item.price //item.currentPrice.first
-    
-    /*switch (item.winnerType) {
-     case .single:
-     price = item.currentPrice.first
-     cell.availLabel.text = "1 Available"
-     case .multiple:
-     price = item.currentPrice.first
-     lowPrice = item.currentPrice.last
-     cell.availLabel.text = "\(item.quantity) Available"
-     }*/
-    
-    //let bidString = "Bid" // (item.numberOfBids == 1) ? "Bid":"Bids"
-    //cell.numberOfBidsLabel.text = "1 \(bidString)" // "\(item.numberOfBids) \(bidString)"
-    
-    /*if let topBid = price {
-     if let lowBid = lowPrice{
-     if item.numberOfBids > 1{
-     cell.currentBidLabel.text = "$\(lowBid)-\(topBid)"
-     }else{
-     cell.currentBidLabel.text = "$\(topBid)"
-     }
-     }else{
-     cell.currentBidLabel.text = "$\(topBid)"
-     }
-     }else{
-     cell.currentBidLabel.text = "$\(item.price)"
-     }*/
-    //cell.currentBidLabel.text = "$50"
-    
-    //cell.setWinning()
-    
-    /*if !item.currentWinners.isEmpty { // && item.hasBid{
-     cell.setWinning()
-     /*if item.isWinning{
-     cell.setWinning()
-     }else{
-     cell.setOutbid()
-     }*/
-     }else{
-     cell.setDefault()
-     }*/
     
     if (!getIsBiddingOpen()) {
       return "NO_BIDS"
@@ -199,7 +147,197 @@ struct Item {
   }
   
   func getWinningBidsString() -> String {
-    return "$50, $51, $52"
+    var winningBidsString = ""
+    for bid in winningBids {
+      print("BID", bid.amount)
+      winningBidsString += String(describing: bid.amount) + " "
+    }
+    return winningBidsString
   }
   
 }
+
+/*
+ 
+ /*if (bid.user == userID){
+ userIsWinning = true
+ }*/
+ /*if (winningBids.count > 0) {
+ FIRDatabase.database().reference().child("users").child(userID!).child("item-bids").child(auctionItem.id).observeSingleEvent(of: .value, with: { (snapshot) in
+ for _ in snapshot.children {
+ if (!userIsWinning) {
+ userIsOutbid = true;
+ }
+ }
+ })
+ }*/
+
+
+/*public void onDataChange(DataSnapshot dataSnapshot) {
+ mItem = dataSnapshot.getValue(Item.class);
+ mNameView.setText(mItem.getName());
+ mDonorView.setText(mItem.getDonorname());
+ mNumAvailableView.setText(String.valueOf(mItem.getQty()) + " Available");
+ mDescriptionView.setText(mItem.getDescription());
+ 
+ Picasso.with(getBaseContext())
+ .load(mItem.getImageurl())
+ .placeholder(R.drawable.ic_item_image)
+ .error(R.drawable.ic_item_image)
+ .into(mImageView);
+ 
+ Integer numBids = mItem.getNumBids();
+ mSuggestedBids = new ArrayList<>();
+ mMinBid = null;
+ if (numBids == 0) {
+ mNumBidsView.setText("SUGGESTED OPENING BID");
+ mWinningBidsView.setText("$" + String.valueOf(mItem.openbid));
+ mWinningBidsView.setTextColor(Color.parseColor("#425b76"));
+ mMinBid = mItem.openbid;
+ if (mMinBid < 50) {
+ mSuggestedBids.add(mMinBid + 1);
+ mSuggestedBids.add(mMinBid + 5);
+ mSuggestedBids.add(mMinBid + 10);
+ } else if (mMinBid < 100) {
+ mSuggestedBids.add(mMinBid + 5);
+ mSuggestedBids.add(mMinBid + 10);
+ mSuggestedBids.add(mMinBid + 25);
+ } else {
+ mSuggestedBids.add(mMinBid + 10);
+ mSuggestedBids.add(mMinBid + 25);
+ mSuggestedBids.add(mMinBid + 50);
+ }
+ mBidButtonLow.setText("$" + mSuggestedBids.get(0));
+ mBidButtonMid.setText("$" + mSuggestedBids.get(1));
+ mBidButtonHigh.setText("$" + mSuggestedBids.get(2));
+ }
+ 
+ mWinningBids = new ArrayList<>();
+ String mWinningBidsString = "";
+ Query winningBidsQuery = mItemBidsReference.limitToLast(mItem.getQty());
+ winningBidsQuery.addListenerForSingleValueEvent(
+ new ValueEventListener() {
+ @Override
+ public void onDataChange(DataSnapshot dataSnapshot) {
+ Log.e("Count ", "" + dataSnapshot.getChildrenCount());
+ for (DataSnapshot bidSnapshot : dataSnapshot.getChildren()) {
+ Bid bid = bidSnapshot.getValue(Bid.class);
+ mWinningBids.add(bid);
+ if (bid.user.equals(getUid())) {
+ mUserIsWinning = true;
+ mWinningBid = bid.amount;
+ }
+ }
+ if (mWinningBids.size() > 0) {
+ 
+ mUserBidsReference.addListenerForSingleValueEvent(
+ new ValueEventListener() {
+ @Override
+ public void onDataChange(DataSnapshot dataSnapshot) {
+ if (dataSnapshot.getChildrenCount() > 0 && !mUserIsWinning) {
+ mUserIsOutbid = true;
+ }
+ 
+ String winningBidsString = "";
+ for (Bid bid : mWinningBids) {
+ if (mMinBid == null || mMinBid > bid.amount) {
+ mMinBid = bid.amount;
+ }
+ winningBidsString = winningBidsString.concat("$" + String.valueOf(bid.amount) + " ");
+ }
+ 
+ if (mUserIsWinning) {
+ if (mItem.getQty() > 1) {
+ mNumBidsView.setText("NICE! YOUR BID IS WINNING");
+ } else {
+ mNumBidsView.setText("NICE! YOUR BID OF $" + mWinningBid + " IS WINNING");
+ }
+ } else if (mUserIsOutbid) {
+ mNumBidsView.setText("YOU'VE BEEN OUTBID!");
+ } else {
+ mNumBidsView.setText("WINNING BIDS (" + String.valueOf(mItem.bids.size()) + " total bids)");
+ }
+ mWinningBidsView.setText(winningBidsString);
+ mWinningBidsView.setTextColor(Color.parseColor("#ff8f59"));
+ 
+ if (mMinBid < 50) {
+ mSuggestedBids.add(mMinBid + 1);
+ mSuggestedBids.add(mMinBid + 5);
+ mSuggestedBids.add(mMinBid + 10);
+ } else if (mMinBid < 100) {
+ mSuggestedBids.add(mMinBid + 5);
+ mSuggestedBids.add(mMinBid + 10);
+ mSuggestedBids.add(mMinBid + 25);
+ } else {
+ mSuggestedBids.add(mMinBid + 10);
+ mSuggestedBids.add(mMinBid + 25);
+ mSuggestedBids.add(mMinBid + 50);
+ }
+ 
+ mBidButtonLow.setText("$" + mSuggestedBids.get(0));
+ mBidButtonMid.setText("$" + mSuggestedBids.get(1));
+ mBidButtonHigh.setText("$" + mSuggestedBids.get(2));
+ }
+ 
+ @Override
+ public void onCancelled(DatabaseError firebaseError) {
+ Log.e("The read failed: ", firebaseError.getMessage());
+ }
+ });
+ 
+ }
+ }
+ 
+ @Override
+ public void onCancelled(DatabaseError firebaseError) {
+ Log.e("The read failed: ", firebaseError.getMessage());
+ }
+ }
+ );
+ 
+ Date now = new Date();
+ 
+ // SMOKE TEST DATA
+ // Date BIDDING_OPENS = new Date(1481130000000L); // "2016/12/6 12:00"
+ Date BIDDING_OPENS = new Date(1480957200000L); // "2016/12/7 12:00"
+ Date BIDDING_CLOSES = new Date(1481151600000L); // "2016/12/7 18:00"
+ Date LIVE_BIDDING_OPENS = new Date(1481140800000L); //"2016/12/7 15:00"
+ 
+ // LIVE AUCTION DATA
+ // Date BIDDING_OPENS = new Date(1481292000000L); // "2016/12/9 9:00"
+ // Date BIDDING_CLOSES = new Date(1481763600000L); // "2016/12/14 20:00"
+ // Date LIVE_BIDDING_OPENS = new Date(1481752800000L); //"2016/12/14 17:00"
+ 
+ SimpleDateFormat sdf = new SimpleDateFormat("MM/dd HH:mm");
+ 
+ Log.d("BIDDING_CLOSES", sdf.format(BIDDING_CLOSES));
+ Log.d("BIDDING AVAILABLE", String.valueOf(now.before(BIDDING_CLOSES)));
+ 
+ if (now.after(BIDDING_CLOSES)) {
+ mBidButtonLow.setEnabled(false);
+ mBidButtonMid.setEnabled(false);
+ mBidButtonHigh.setEnabled(false);
+ mBidButtonCustom.setEnabled(false);
+ mBiddingStatusView.setText("SORRY, BIDDING HAS CLOSED");
+ } else if (mItem.getIslive()) {
+ if (now.after(LIVE_BIDDING_OPENS)) {
+ mBiddingStatusView.setText("BIDDING CLOSES " + sdf.format(BIDDING_CLOSES));
+ } else {
+ mBidButtonLow.setEnabled(false);
+ mBidButtonMid.setEnabled(false);
+ mBidButtonHigh.setEnabled(false);
+ mBidButtonCustom.setEnabled(false);
+ mBiddingStatusView.setText("BIDDING OPENS " + sdf.format(LIVE_BIDDING_OPENS));
+ }
+ } else {
+ if (now.after(BIDDING_OPENS)) {
+ mBiddingStatusView.setText("BIDDING CLOSES " + sdf.format(BIDDING_CLOSES));
+ } else {
+ mBidButtonLow.setEnabled(false);
+ mBidButtonMid.setEnabled(false);
+ mBidButtonHigh.setEnabled(false);
+ mBidButtonCustom.setEnabled(false);
+ mBiddingStatusView.setText("BIDDING OPENS " + sdf.format(BIDDING_OPENS));
+ }
+ }
+ }*/*/
