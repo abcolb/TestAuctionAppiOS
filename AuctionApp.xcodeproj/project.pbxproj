@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		893422171DF2B12500A39D71 /* Bid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893422161DF2B12500A39D71 /* Bid.swift */; };
-		894AC5441DF81AEA008BBDAD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 894AC5431DF81AEA008BBDAD /* GoogleService-Info.plist */; };
+		894AC5481DF86185008BBDAD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 894AC5471DF86185008BBDAD /* GoogleService-Info.plist */; };
 		896C9CC21DEAEEF000F51218 /* ItemDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896C9CC11DEAEEF000F51218 /* ItemDetailViewController.swift */; };
 		8984B2541DD9CAD700DF4602 /* ItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8984B2531DD9CAD700DF4602 /* ItemTableViewCell.swift */; };
 		BB2385621B3DD5AB0079CD01 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2385611B3DD5AB0079CD01 /* AppDelegate.swift */; };
@@ -27,7 +27,7 @@
 		6157CFFFE11770BD24CF9705 /* Pods-AuctionApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AuctionApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-AuctionApp/Pods-AuctionApp.release.xcconfig"; sourceTree = "<group>"; };
 		893062C81DD991FB00430E96 /* AuctionApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AuctionApp.entitlements; sourceTree = "<group>"; };
 		893422161DF2B12500A39D71 /* Bid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bid.swift; sourceTree = "<group>"; };
-		894AC5431DF81AEA008BBDAD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		894AC5471DF86185008BBDAD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		896C9CC11DEAEEF000F51218 /* ItemDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemDetailViewController.swift; sourceTree = "<group>"; };
 		8984B2531DD9CAD700DF4602 /* ItemTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemTableViewCell.swift; sourceTree = "<group>"; };
 		BB23855C1B3DD5AB0079CD01 /* AuctionApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AuctionApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -99,7 +99,7 @@
 		BB23855F1B3DD5AB0079CD01 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				894AC5431DF81AEA008BBDAD /* GoogleService-Info.plist */,
+				894AC5471DF86185008BBDAD /* GoogleService-Info.plist */,
 				BB2385601B3DD5AB0079CD01 /* Info.plist */,
 				BB2385851B3DD8820079CD01 /* AuctionApp-Bridging-Header.h */,
 			);
@@ -226,7 +226,7 @@
 			files = (
 				BB2385671B3DD5AB0079CD01 /* Main.storyboard in Resources */,
 				BB2385691B3DD5AB0079CD01 /* Images.xcassets in Resources */,
-				894AC5441DF81AEA008BBDAD /* GoogleService-Info.plist in Resources */,
+				894AC5481DF86185008BBDAD /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
