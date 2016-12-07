@@ -1,11 +1,8 @@
 import UIKit
 
-class ItemsTableViewController: UITableViewController, UISearchBarDelegate, ItemTableViewCellDelegate {
-
-  @IBOutlet var searchBar: UISearchBar!
+class ItemsTableViewController: UITableViewController, ItemTableViewCellDelegate {
 
   var items: [Item] = []
-  var filterType: FilterType = .all
   var sizingCell: ItemTableViewCell?
   let ref = FIRDatabase.database().reference(withPath: "items")
   var itemDetailViewController: ItemDetailViewController? = nil
@@ -31,7 +28,6 @@ class ItemsTableViewController: UITableViewController, UISearchBarDelegate, Item
         newItems.append(auctionItem)
       }
       self.items = newItems
-      self.filterTable(self.filterType)
       // iquery?.addAscendingOrder("closetime")
       // query?.addAscendingOrder("name")
       self.tableView.reloadData()
@@ -121,10 +117,6 @@ class ItemsTableViewController: UITableViewController, UISearchBarDelegate, Item
     var item = items[indexPath.row]
     // tableView.reloadData()
   }*/
-
-  /*func searchForQuery(_ query: String) -> ([Item]) {
-    return applyFilter(.search(searchTerm: query))
-  }*/
   
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
     if segue.identifier == "showItem" {
@@ -148,82 +140,5 @@ class ItemsTableViewController: UITableViewController, UISearchBarDelegate, Item
       biddingVC.didMove(toParentViewController: self)
     }*/
     print(item)
-  }
-  
-  func applyFilter(_ filter: FilterType) -> ([Item]) {
-    // print("APPLY FILTER")
-    return items.filter({ (item) -> Bool in
-      // print(item.name)
-      return filter.predicate.evaluate(with: item)
-    })
-  }
-
-  func filterTable(_ filter: FilterType) {
-    filterType = filter
-    self.items = applyFilter(filter)
-    self.tableView.reloadData()
-  }
-
-  func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-    if searchText.isEmpty {
-      filterTable(.all)
-    }else{
-      filterTable(.search(searchTerm:searchText))
-    }
-  }
-
-  func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-    // self.segmentBarValueChanged(segmentControl)
-    searchBar.resignFirstResponder()
-  }
-
-}
-
-enum FilterType: CustomStringConvertible {
-  case all
-  case noBids
-  case myItems
-  case search(searchTerm: String)
-
-  var description: String {
-    switch self{
-    case .all:
-      return "All"
-    case .noBids:
-      return "NoBids"
-    case .myItems:
-      return "My Items"
-    case .search:
-      return "Searching"
-    }
-  }
-
-  var predicate: NSPredicate {
-    switch self {
-    case .all:
-      return NSPredicate(value: true)
-    case .noBids:
-      return NSPredicate(block: {(object, bindings) -> Bool in
-        /*if let item = object as? Item {
-         return true //item.numberOfBids == 0
-         }*/
-        return false
-      })
-    case .myItems:
-      return NSPredicate(block: {(object, bindings) -> Bool in
-        if (object as? Item) != nil {
-          return false //item.hasBid
-        }
-        return false
-      })
-
-    case .search(let searchTerm):
-      print("SEARCH TERM")
-      print(searchTerm)
-      // return NSPredicate(format: "(name CONTAINS[c] %@) OR (addedByUser CONTAINS[c] %@) OR (description CONTAINS[c] %@)", searchTerm)
-      return NSPredicate(format: "name CONTAINS[c] %@", searchTerm)
-    default:
-      return NSPredicate(value: true)
-    }
   }
 }
