@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		891243671DFA36D300381002 /* ItemListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891243661DFA36D300381002 /* ItemListViewController.swift */; };
 		893422171DF2B12500A39D71 /* Bid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893422161DF2B12500A39D71 /* Bid.swift */; };
 		894AC5481DF86185008BBDAD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 894AC5471DF86185008BBDAD /* GoogleService-Info.plist */; };
 		896C9CC21DEAEEF000F51218 /* ItemDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896C9CC11DEAEEF000F51218 /* ItemDetailViewController.swift */; };
@@ -15,7 +16,6 @@
 		BB2385641B3DD5AB0079CD01 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2385631B3DD5AB0079CD01 /* LoginViewController.swift */; };
 		BB2385671B3DD5AB0079CD01 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BB2385651B3DD5AB0079CD01 /* Main.storyboard */; };
 		BB2385691B3DD5AB0079CD01 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BB2385681B3DD5AB0079CD01 /* Images.xcassets */; };
-		BB2385841B3DD8660079CD01 /* ItemsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2385831B3DD8660079CD01 /* ItemsTableViewController.swift */; };
 		BB23858A1B3DD9640079CD01 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2385891B3DD9640079CD01 /* Item.swift */; };
 		BB7DA5111B42C8100018B530 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB7DA5101B42C8100018B530 /* User.swift */; };
 		E62F60D236670C997336FB7C /* libPods-AuctionApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1BAD4AA0F06AAE75DA76B386 /* libPods-AuctionApp.a */; };
@@ -25,6 +25,7 @@
 		1BAD4AA0F06AAE75DA76B386 /* libPods-AuctionApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AuctionApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1F1960090F094A3ADEB9C1D9 /* Pods-AuctionApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AuctionApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AuctionApp/Pods-AuctionApp.debug.xcconfig"; sourceTree = "<group>"; };
 		6157CFFFE11770BD24CF9705 /* Pods-AuctionApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AuctionApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-AuctionApp/Pods-AuctionApp.release.xcconfig"; sourceTree = "<group>"; };
+		891243661DFA36D300381002 /* ItemListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemListViewController.swift; sourceTree = "<group>"; };
 		893062C81DD991FB00430E96 /* AuctionApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AuctionApp.entitlements; sourceTree = "<group>"; };
 		893422161DF2B12500A39D71 /* Bid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bid.swift; sourceTree = "<group>"; };
 		894AC5471DF86185008BBDAD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -36,7 +37,6 @@
 		BB2385631B3DD5AB0079CD01 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		BB2385661B3DD5AB0079CD01 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		BB2385681B3DD5AB0079CD01 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		BB2385831B3DD8660079CD01 /* ItemsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemsTableViewController.swift; sourceTree = "<group>"; };
 		BB2385851B3DD8820079CD01 /* AuctionApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AuctionApp-Bridging-Header.h"; sourceTree = "<group>"; };
 		BB2385891B3DD9640079CD01 /* Item.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		BB7DA5101B42C8100018B530 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -110,9 +110,9 @@
 			isa = PBXGroup;
 			children = (
 				BB2385631B3DD5AB0079CD01 /* LoginViewController.swift */,
-				BB2385831B3DD8660079CD01 /* ItemsTableViewController.swift */,
 				896C9CC11DEAEEF000F51218 /* ItemDetailViewController.swift */,
 				8984B2531DD9CAD700DF4602 /* ItemTableViewCell.swift */,
+				891243661DFA36D300381002 /* ItemListViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -300,7 +300,7 @@
 			files = (
 				BB2385641B3DD5AB0079CD01 /* LoginViewController.swift in Sources */,
 				896C9CC21DEAEEF000F51218 /* ItemDetailViewController.swift in Sources */,
-				BB2385841B3DD8660079CD01 /* ItemsTableViewController.swift in Sources */,
+				891243671DFA36D300381002 /* ItemListViewController.swift in Sources */,
 				893422171DF2B12500A39D71 /* Bid.swift in Sources */,
 				BB23858A1B3DD9640079CD01 /* Item.swift in Sources */,
 				BB7DA5111B42C8100018B530 /* User.swift in Sources */,

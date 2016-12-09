@@ -132,19 +132,6 @@ struct Item {
     return winningBids.count > 0 //numBids > 0
   }
   
-  func getBidStatus() -> String {
-    
-    if (!getIsBiddingOpen()) {
-      return "NO_BIDS"
-    } else if (false) {
-      return "OUTBID"
-    } else if (getIsUserWinning()) {
-      return "WINNING"
-    } else {
-      return "SHOULD_BID"
-    }
-  }
-  
   func getWinningBidsString() -> String {
     var winningBidsString = ""
     for bid in winningBids {
