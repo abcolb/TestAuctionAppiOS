@@ -9,13 +9,13 @@ struct Item {
   let imageUrl: String
   let quantity: Int
   let openBid: Int
-  let isLive: Bool
+  let isLive: Int
   var numBids: Int
   var winningBids: [Bid] = []
   var userIsWinning: Bool
   var userIsOutbid: Bool
 
-  init(name: String, addedByUser: String, description: String, imageUrl: String, quantity: Int, openBid: Int, isLive: Bool, numBids: Int, key: String = "") {
+  init(name: String, addedByUser: String, description: String, imageUrl: String, quantity: Int, openBid: Int, isLive: Int, numBids: Int, key: String = "") {
     self.id = key
     self.name = name
     self.addedByUser = addedByUser
@@ -39,7 +39,7 @@ struct Item {
     imageUrl = snapshotValue["imageurl"] as! String
     quantity = snapshotValue["qty"] as! Int
     openBid = snapshotValue["openbid"] as! Int
-    isLive = snapshotValue["islive"] as! Bool
+    isLive = snapshotValue["islive"] as! Int
     
     userIsOutbid = false
     userIsWinning = false
@@ -115,7 +115,7 @@ struct Item {
     if (now.compare(BIDDING_CLOSES!) == ComparisonResult.orderedDescending) {
       return false
     }
-    if (isLive) {
+    if (isLive == 1) {
       if (now.compare(LIVE_BIDDING_OPENS!) != ComparisonResult.orderedDescending) {
         return false
       }

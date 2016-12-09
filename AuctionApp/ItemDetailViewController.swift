@@ -99,7 +99,7 @@ class ItemDetailViewController: UIViewController {
           bidderSegmentedControl.tintColor = UIColor(red:0.26, green:0.36, blue:0.46, alpha:1.0)
           biddingStatusLabel.text = ("Sorry, bidding has closed").uppercased()
         }
-        if (item.isLive) {
+        if (item.isLive == 1) {
           if (now.compare(LIVE_BIDDING_OPENS!) == ComparisonResult.orderedDescending) {
             biddingStatusLabel.text = ("Bidding closes " + formatter.string(from: BIDDING_CLOSES!)).uppercased()
           } else {
