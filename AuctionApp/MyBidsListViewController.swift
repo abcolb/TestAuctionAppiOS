@@ -1,7 +1,7 @@
 import UIKit
 import Firebase
 
-class ItemListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class MyBidsListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
   
   var ref: FIRDatabaseReference!
   var items: [Item] = []

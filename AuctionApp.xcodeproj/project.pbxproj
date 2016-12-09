@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		891243671DFA36D300381002 /* ItemListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891243661DFA36D300381002 /* ItemListViewController.swift */; };
+		891243691DFA905300381002 /* NoBidsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 891243681DFA905300381002 /* NoBidsListViewController.swift */; };
+		8912436B1DFA908600381002 /* MyBidsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8912436A1DFA908600381002 /* MyBidsListViewController.swift */; };
 		893422171DF2B12500A39D71 /* Bid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893422161DF2B12500A39D71 /* Bid.swift */; };
 		894AC5481DF86185008BBDAD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 894AC5471DF86185008BBDAD /* GoogleService-Info.plist */; };
 		896C9CC21DEAEEF000F51218 /* ItemDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896C9CC11DEAEEF000F51218 /* ItemDetailViewController.swift */; };
@@ -26,6 +28,8 @@
 		1F1960090F094A3ADEB9C1D9 /* Pods-AuctionApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AuctionApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AuctionApp/Pods-AuctionApp.debug.xcconfig"; sourceTree = "<group>"; };
 		6157CFFFE11770BD24CF9705 /* Pods-AuctionApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AuctionApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-AuctionApp/Pods-AuctionApp.release.xcconfig"; sourceTree = "<group>"; };
 		891243661DFA36D300381002 /* ItemListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemListViewController.swift; sourceTree = "<group>"; };
+		891243681DFA905300381002 /* NoBidsListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoBidsListViewController.swift; sourceTree = "<group>"; };
+		8912436A1DFA908600381002 /* MyBidsListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyBidsListViewController.swift; sourceTree = "<group>"; };
 		893062C81DD991FB00430E96 /* AuctionApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AuctionApp.entitlements; sourceTree = "<group>"; };
 		893422161DF2B12500A39D71 /* Bid.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bid.swift; sourceTree = "<group>"; };
 		894AC5471DF86185008BBDAD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -113,6 +117,8 @@
 				896C9CC11DEAEEF000F51218 /* ItemDetailViewController.swift */,
 				8984B2531DD9CAD700DF4602 /* ItemTableViewCell.swift */,
 				891243661DFA36D300381002 /* ItemListViewController.swift */,
+				891243681DFA905300381002 /* NoBidsListViewController.swift */,
+				8912436A1DFA908600381002 /* MyBidsListViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -300,10 +306,12 @@
 			files = (
 				BB2385641B3DD5AB0079CD01 /* LoginViewController.swift in Sources */,
 				896C9CC21DEAEEF000F51218 /* ItemDetailViewController.swift in Sources */,
+				8912436B1DFA908600381002 /* MyBidsListViewController.swift in Sources */,
 				891243671DFA36D300381002 /* ItemListViewController.swift in Sources */,
 				893422171DF2B12500A39D71 /* Bid.swift in Sources */,
 				BB23858A1B3DD9640079CD01 /* Item.swift in Sources */,
 				BB7DA5111B42C8100018B530 /* User.swift in Sources */,
+				891243691DFA905300381002 /* NoBidsListViewController.swift in Sources */,
 				8984B2541DD9CAD700DF4602 /* ItemTableViewCell.swift in Sources */,
 				BB2385621B3DD5AB0079CD01 /* AppDelegate.swift in Sources */,
 			);
