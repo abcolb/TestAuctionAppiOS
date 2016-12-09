@@ -37,6 +37,7 @@ class ItemDetailViewController: UIViewController {
                 winningBids.append(bid)
                 if (bid.user == self.getUid()){
                   auctionItem.userIsWinning = true
+                  auctionItem.userWinningBid = bid
                 }
                 auctionItem.winningBids = winningBids
               }
@@ -85,8 +86,18 @@ class ItemDetailViewController: UIViewController {
         }
 
         if (self.item!.numBids > 0) {
-          numberOfBidsLabel.text = "WINNING BIDS (" + String(item!.numBids) + " total bids)"
           currentBidLabel.text = self.item!.getWinningBidsString()
+          if (self.item!.userIsWinning) {
+            if (self.item!.quantity > 1) {
+              numberOfBidsLabel.text = "NICE! YOUR BID IS WINNING"
+            } else {
+              numberOfBidsLabel.text = "NICE! YOUR BID OF $" + String(describing: self.item!.userWinningBid!.amount) + " IS WINNING"
+            }
+          } else if (self.item!.userIsOutbid) {
+            numberOfBidsLabel.text = "YOU'VE BEEN OUTBID!"
+          } else {
+            numberOfBidsLabel.text = "WINNING BIDS (" + String(item!.numBids) + " total bids)"
+          }
         } else {
           numberOfBidsLabel.text = "SUGGESTED OPENING BID"
           currentBidLabel.text = "$" + String(item!.openBid)
@@ -111,7 +122,7 @@ class ItemDetailViewController: UIViewController {
         // SMOKE TEST DATA
         //let BIDDING_OPENS = formatter.date(from: "2016/12/09 12:00")
         let BIDDING_OPENS = formatter.date(from: "2016/12/08 12:00")
-        let BIDDING_CLOSES = formatter.date(from: "2016/12/09 18:00")
+        let BIDDING_CLOSES = formatter.date(from: "2016/12/09 16:00")
         let LIVE_BIDDING_OPENS = formatter.date(from: "2016/12/09 15:00")
 
         // LIVE AUCTION DATA
@@ -127,7 +138,7 @@ class ItemDetailViewController: UIViewController {
           bidderSegmentedControl.tintColor = UIColor(red:0.26, green:0.36, blue:0.46, alpha:1.0)
           biddingStatusLabel.text = ("Sorry, bidding has closed").uppercased()
         }
-        if (item?.isLive == 1) {
+        if (self.item?.isLive == 1) {
           if (now.compare(LIVE_BIDDING_OPENS!) == ComparisonResult.orderedDescending) {
             biddingStatusLabel.text = ("Bidding closes " + formatter.string(from: BIDDING_CLOSES!)).uppercased()
           } else {

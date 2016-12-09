@@ -41,7 +41,9 @@ class MyBidsListViewController: UIViewController, UITableViewDelegate, UITableVi
             }
           }
         }
-      })
+      }) { (error) in
+        print(error.localizedDescription)
+      }
     }
 
     let button = UIButton(type: UIButtonType.custom)

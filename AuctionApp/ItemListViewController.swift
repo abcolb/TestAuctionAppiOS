@@ -15,6 +15,7 @@ class ItemListViewController: UIViewController, UITableViewDelegate, UITableView
 
     let user = FIRAuth.auth()?.currentUser
     if (user != nil) {
+      self.items = []
       ref.child("items").observe(.value, with: { snapshot in
         for item in snapshot.children {
           var auctionItem = Item(snapshot: item as! FIRDataSnapshot)
@@ -110,7 +111,6 @@ class ItemListViewController: UIViewController, UITableViewDelegate, UITableView
       print ("Error signing out:", signOutError.localizedDescription)
     }
   }
-
 
   override func viewWillAppear(_ animated: Bool) {
     self.tableView.reloadData()
