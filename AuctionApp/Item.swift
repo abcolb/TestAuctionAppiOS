@@ -73,6 +73,11 @@ struct Item {
     return self.openBid
   }
   
+  func getIsUserWinning() -> Bool {
+    //item.bids.first.email == user.email) {
+    return winningBids.count > 0 //numBids > 0
+  }
+  
   func getBidType() -> String {
     let currentPrice = self.getPrice()
     if (currentPrice < 50) {
@@ -100,10 +105,10 @@ struct Item {
     let formatter = DateFormatter()
     formatter.dateFormat = "yyyy/MM/dd HH:mm"
     // SMOKE TEST DATA
-    // let BIDDING_OPENS = formatter.date(from: "2016/12/7 15:00")
-    let BIDDING_OPENS = formatter.date(from: "2016/12/6 15:00")
-    let BIDDING_CLOSES = formatter.date(from: "2016/12/7 20:00")
-    let LIVE_BIDDING_OPENS = formatter.date(from: "2016/12/7 17:00")
+    // let BIDDING_OPENS = formatter.date(from: "2016/12/9 15:00")
+    let BIDDING_OPENS = formatter.date(from: "2016/12/8 15:00")
+    let BIDDING_CLOSES = formatter.date(from: "2016/12/9 20:00")
+    let LIVE_BIDDING_OPENS = formatter.date(from: "2016/12/9 17:00")
     
     // LIVE AUCTION DATA
     // let BIDDING_OPENS = formatter.date(from: "2016/12/12 15:00")
@@ -127,20 +132,14 @@ struct Item {
     return true
   }
   
-  func getIsUserWinning() -> Bool {
-    //item.bids.first.email == user.email) {
-    return winningBids.count > 0 //numBids > 0
-  }
-  
   func getWinningBidsString() -> String {
     var winningBidsString = ""
-    for bid in winningBids {
+    for bid in self.winningBids {
       print("BID", bid.amount)
       winningBidsString += String(describing: bid.amount) + " "
     }
     return winningBidsString
   }
-  
 }
 
 /*

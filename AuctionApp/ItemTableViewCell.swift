@@ -44,23 +44,21 @@ class ItemTableViewCell: UITableViewCell {
     suggestedActionLabel.text = "BID NOW"
   }
   
-  func setNoBids() {
-    print("PRINT NO BIDS")
+  func setBiddingDisabled() {
+    print("PRINT NO BIDDING YET")
     suggestedActionLabel.text = ""
   }
   
-  func setBidStatusString(bidStatus: String) {
-    switch (bidStatus) {
-    case "WINNING":
-      self.setWinning()
-    case "OUTBID":
+  func setBidStatus(){
+    print(String(describing: self.item))
+    if (!self.item!.getIsBiddingOpen()) {
+      self.setBiddingDisabled()
+    } else if (self.item!.userIsOutbid) {
       self.setOutbid()
-    case "SHOULD_BID":
+    } else if (self.item!.userIsWinning) {
+      self.setWinning()
+    } else {
       self.setShouldBid()
-    case "NO_BIDS":
-      self.setNoBids()
-    default:
-      break;
     }
   }
   

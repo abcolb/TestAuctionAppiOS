@@ -15,19 +15,20 @@ class NoBidsListViewController: UIViewController, UITableViewDelegate, UITableVi
     
     let user = FIRAuth.auth()?.currentUser
     if (user != nil) {
-      //let userID = user?.uid
-      
       ref.child("items").observe(.value, with: { snapshot in
-        var newItems: [Item] = []
-        for item in snapshot.children {
-          let auctionItem = Item(snapshot: item as! FIRDataSnapshot)
-          newItems.append(auctionItem)
+        self.items = []
+        for auctionItem in snapshot.children.allObjects as! [FIRDataSnapshot] {
+          let dict = auctionItem.value as! Dictionary<String, AnyObject>
+          if dict["bids"] == nil {
+            print("NO BID ITEM", String(describing: auctionItem))
+            let auctionItem = Item(snapshot: auctionItem)
+            self.items.append(auctionItem)
+            self.tableView.reloadData()
+          }
         }
-        self.items = newItems
-        self.tableView.reloadData()
       })
     }
-    
+
     let button = UIButton(type: UIButtonType.custom)
     button.setImage(UIImage(named: "HSLogOutIcon"), for: UIControlState.normal)
     button.addTarget(self, action: #selector(logOutPressed), for: UIControlEvents.touchUpInside)
@@ -77,7 +78,7 @@ class NoBidsListViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     cell.item = item
-    cell.setBidStatusString(bidStatus: self.getBidStatus(item: item))
+    cell.setBidStatus()
     return cell
   }
   
@@ -88,18 +89,6 @@ class NoBidsListViewController: UIViewController, UITableViewDelegate, UITableVi
       dismiss(animated: true, completion: nil)
     } catch let signOutError as NSError {
       print ("Error signing out:", signOutError.localizedDescription)
-    }
-  }
-  
-  func getBidStatus(item: Item) -> String {
-    if (!item.getIsBiddingOpen()) {
-      return "NO_BIDS"
-    } else if (false) {
-      return "OUTBID"
-    } else if (item.getIsUserWinning()) {
-      return "WINNING"
-    } else {
-      return "SHOULD_BID"
     }
   }
   
@@ -128,7 +117,7 @@ class NoBidsListViewController: UIViewController, UITableViewDelegate, UITableVi
     guard let detail: ItemDetailViewController = segue.destination as? ItemDetailViewController else {
       return
     }
-    detail.detailItem = self.items[path.item]
+    detail.itemKey = self.items[path.item].id
     detail.hidesBottomBarWhenPushed = true
   }
 }
