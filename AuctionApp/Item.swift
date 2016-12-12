@@ -58,7 +58,13 @@ struct Item {
       winningBidsQuery.observeSingleEvent(of: .value, with: { (snapshot) in
         for child in snapshot.children {
           let bid = Bid(snapshot: child as! FIRDataSnapshot)
+          /*let userInfoQuery = FIRDatabase.database().reference().child("users").child(bid.user)
+          userInfoQuery.observeSingleEvent(of: .value, with: { (snapshot) in
+            if snapshot.exists(){
+              bid.userInfo = User(snapshot: snapshot)
+            }*/
           winningBidsFound.append(bid)
+          //})
         }
       })
       winningBids = winningBidsFound;
@@ -124,7 +130,7 @@ struct Item {
   func getWinningBidsString() -> String {
     var winningBidsString = ""
     for bid in self.winningBids {
-      winningBidsString += "$" + String(describing: bid.amount) + " "
+      winningBidsString += "$" + String(describing: bid.amount) + " (" + String(describing: bid.user) + ")"
     }
     return winningBidsString
   }

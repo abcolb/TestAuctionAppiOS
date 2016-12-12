@@ -577,10 +577,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dZg-ND-3cq">
-                                <rect key="frame" x="16" y="235" width="343" height="210"/>
+                                <rect key="frame" x="16" y="235" width="343" height="177"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dqQ-im-zv1">
-                                        <rect key="frame" x="0.0" y="0.0" width="343" height="217"/>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dqQ-im-zv1">
+                                        <rect key="frame" x="0.0" y="0.0" width="343" height="180"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Shortname" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jxb-Ye-57m">
                                                 <rect key="frame" x="0.0" y="0.0" width="343" height="33"/>
@@ -588,17 +588,8 @@
                                                 <color key="textColor" red="0.26321634649999998" green="0.35505452749999999" blue="0.4589998126" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Number Available" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="is9-Vg-se2">
-                                                <rect key="frame" x="0.0" y="57" width="343" height="24"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="24" id="r4C-y9-raW"/>
-                                                </constraints>
-                                                <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="18"/>
-                                                <color key="textColor" red="0.26321634649999998" green="0.35505452749999999" blue="0.4589998126" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="20" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Oca-XN-adx">
-                                                <rect key="frame" x="0.0" y="81" width="343" height="123"/>
+                                                <rect key="frame" x="0.0" y="57" width="343" height="123"/>
                                                 <string key="text">longname longname longname longname longname longname longname longname longname longname longname longname longname longname longname longname longname longname longname longname longname longname</string>
                                                 <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="15"/>
                                                 <color key="textColor" red="0.26321634649999998" green="0.35505452749999999" blue="0.4589998126" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -619,15 +610,12 @@
                                             <constraint firstAttribute="bottom" secondItem="Oca-XN-adx" secondAttribute="bottom" id="8px-EL-qbu"/>
                                             <constraint firstItem="328-xs-ZVz" firstAttribute="leading" secondItem="dqQ-im-zv1" secondAttribute="leading" id="Gc5-JE-Vay"/>
                                             <constraint firstAttribute="trailing" secondItem="Oca-XN-adx" secondAttribute="trailing" id="Ia1-Ra-Huy"/>
-                                            <constraint firstAttribute="trailing" secondItem="is9-Vg-se2" secondAttribute="trailing" id="Kdc-GO-C4n"/>
+                                            <constraint firstItem="Oca-XN-adx" firstAttribute="top" secondItem="328-xs-ZVz" secondAttribute="bottom" id="O8d-fP-tB6"/>
                                             <constraint firstItem="328-xs-ZVz" firstAttribute="top" secondItem="Jxb-Ye-57m" secondAttribute="bottom" id="aN5-R4-gOS"/>
-                                            <constraint firstItem="is9-Vg-se2" firstAttribute="top" secondItem="328-xs-ZVz" secondAttribute="bottom" id="b8J-1N-pLq"/>
                                             <constraint firstItem="Jxb-Ye-57m" firstAttribute="top" secondItem="dqQ-im-zv1" secondAttribute="top" id="cXh-JT-dCb"/>
                                             <constraint firstAttribute="trailing" secondItem="Jxb-Ye-57m" secondAttribute="trailing" id="e9n-pS-pVv"/>
                                             <constraint firstItem="Jxb-Ye-57m" firstAttribute="leading" secondItem="dqQ-im-zv1" secondAttribute="leading" id="hL1-Yy-TS9"/>
                                             <constraint firstItem="Oca-XN-adx" firstAttribute="leading" secondItem="dqQ-im-zv1" secondAttribute="leading" id="o7r-Qa-M0p"/>
-                                            <constraint firstItem="Oca-XN-adx" firstAttribute="top" secondItem="is9-Vg-se2" secondAttribute="bottom" id="tbp-VE-J1U"/>
-                                            <constraint firstItem="is9-Vg-se2" firstAttribute="leading" secondItem="dqQ-im-zv1" secondAttribute="leading" id="zbd-s9-4nv"/>
                                         </constraints>
                                     </view>
                                 </subviews>
@@ -651,8 +639,8 @@
                                 <color key="textColor" red="0.99229079480000004" green="0.58421629669999997" blue="0.4258170724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="KQb-vK-36T">
-                                <rect key="frame" x="16" y="542" width="343" height="29"/>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="KQb-vK-36T">
+                                <rect key="frame" x="16" y="472" width="343" height="51"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="l6p-rR-SFn"/>
                                 </constraints>
@@ -719,7 +707,6 @@
                         <outlet property="itemDonorLabel" destination="328-xs-ZVz" id="kD7-Pp-5PD"/>
                         <outlet property="itemImageView" destination="G9y-ln-hUv" id="Ez2-ve-Esy"/>
                         <outlet property="itemTitleLabel" destination="Jxb-Ye-57m" id="Mok-bx-UIe"/>
-                        <outlet property="numAvailableLabel" destination="is9-Vg-se2" id="00v-rz-qmq"/>
                         <outlet property="numOfBidsLabel" destination="gIU-hi-5Db" id="51h-mV-uDj"/>
                         <outlet property="numberOfBidsLabel" destination="gIU-hi-5Db" id="6Hh-2D-0dM"/>
                     </connections>

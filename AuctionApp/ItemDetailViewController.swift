@@ -20,7 +20,6 @@ class ItemDetailViewController: UIViewController {
   @IBOutlet var numberOfBidsLabel: UILabel!
   @IBOutlet var itemDonorLabel: UILabel!
   @IBOutlet var bidderSegmentedControl: UISegmentedControl!
-  @IBOutlet var numAvailableLabel: UILabel!
   @IBOutlet var numOfBidsLabel: UILabel!
   @IBOutlet var biddingStatusLabel: UILabel!
 
@@ -59,12 +58,11 @@ class ItemDetailViewController: UIViewController {
 
   func configureView() {
     if (self.item != nil) {
-      if let itemDescriptionLabel = itemDescriptionLabel, let itemTitleLabel = itemTitleLabel, let itemImageView = itemImageView, let itemDonorLabel = itemDonorLabel, let currentBidLabel = currentBidLabel, let bidderSegmentedControl = bidderSegmentedControl, let numAvailableLabel = numAvailableLabel, let biddingStatusLabel = biddingStatusLabel, let numberOfBidsLabel = numberOfBidsLabel {
+      if let itemDescriptionLabel = itemDescriptionLabel, let itemTitleLabel = itemTitleLabel, let itemImageView = itemImageView, let itemDonorLabel = itemDonorLabel, let currentBidLabel = currentBidLabel, let bidderSegmentedControl = bidderSegmentedControl, let biddingStatusLabel = biddingStatusLabel, let numberOfBidsLabel = numberOfBidsLabel {
         itemDescriptionLabel.text = self.item!.description
         itemTitleLabel.text = self.item!.name
         itemTitleLabel.sizeToFit()
         itemDonorLabel.text = self.item!.addedByUser
-        numAvailableLabel.text = String(self.item!.quantity) + " Available"
 
         if self.item!.imageUrl.characters.count > 0 {
           if let url = URL(string: self.item!.imageUrl) {
@@ -100,7 +98,7 @@ class ItemDetailViewController: UIViewController {
             } else if (self.item!.userIsOutbid) {
               numberOfBidsLabel.text = "YOU'VE BEEN OUTBID!"
             } else {
-              numberOfBidsLabel.text = "WINNING BIDS (" + String(item!.numBids) + " total bids)"
+              numberOfBidsLabel.text = "WINNING BIDS (" + String(item!.numBids) + " total bids, " + String(self.item!.quantity) + " available)"
             }
           } else {
             numberOfBidsLabel.text = "SUGGESTED OPENING BID"

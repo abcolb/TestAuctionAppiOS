@@ -36,25 +36,71 @@ class LoginViewController: UIViewController {
     self.present(alertController, animated: true, completion: nil)
   }
   
+  func alertLoginError() {
+    let alertController = UIAlertController(title: "Log in error", message: "Enter an email and password to login", preferredStyle: .alert)
+    let okAction = UIAlertAction(title: "Ok", style: .default)
+    
+    alertController.addAction(okAction)
+    self.present(alertController, animated: true, completion: nil)
+  }
+  
+  func alertSignUpError() {
+    let alertController = UIAlertController(title: "Sign up error", message: "Enter an email and password to sign up", preferredStyle: .alert)
+    let okAction = UIAlertAction(title: "Ok", style: .default)
+    
+    alertController.addAction(okAction)
+    self.present(alertController, animated: true, completion: nil)
+  }
+  
+  func alertFirebaseLoginError(error: String) {
+    let alertController = UIAlertController(title: "Log in error", message: error, preferredStyle: .alert)
+    let okAction = UIAlertAction(title: "Ok", style: .default)
+    
+    alertController.addAction(okAction)
+    self.present(alertController, animated: true, completion: nil)
+  }
+  
+  func alertFirebaseSignupError(error: String) {
+    let alertController = UIAlertController(title: "Sign up error", message: error, preferredStyle: .alert)
+    let okAction = UIAlertAction(title: "Ok", style: .default)
+    
+    alertController.addAction(okAction)
+    self.present(alertController, animated: true, completion: nil)
+  }
+  
   @IBAction func loginDidTouch(_ sender: AnyObject) {
-    guard let email = emailTextField.text, let password = passwordTextField.text else { return }
-    FIRAuth.auth()?.signIn(withEmail: email, password: password) { (user, error) in
-      if let error = error {
-        print(error.localizedDescription)
-        return
+    guard let email = emailTextField.text, let password = passwordTextField.text else {
+      alertLoginError()
+      return
+    }
+    if ((emailTextField.text?.characters.count)! > 0 && (passwordTextField.text?.characters.count)! > 0){
+      FIRAuth.auth()?.signIn(withEmail: email, password: password) { (user, error) in
+        if let error = error {
+          self.alertFirebaseLoginError(error: error.localizedDescription)
+          return
+        }
+        self.signedIn(user!)
       }
-      self.signedIn(user!)
+    } else {
+      alertLoginError()
     }
   }
   
   @IBAction func signUpDidTouch(_ sender: AnyObject) {
-    guard let email = emailTextField.text, let password = passwordTextField.text else { return }
-    FIRAuth.auth()?.createUser(withEmail: email, password: password) { (user, error) in
-      if let error = error {
-        print(error.localizedDescription)
-        return
+    guard let email = emailTextField.text, let password = passwordTextField.text else {
+      alertSignUpError()
+      return
+    }
+    if ((emailTextField.text?.characters.count)! > 0 && (passwordTextField.text?.characters.count)! > 0){
+      FIRAuth.auth()?.createUser(withEmail: email, password: password) { (user, error) in
+        if let error = error {
+          self.alertFirebaseSignupError(error: error.localizedDescription)
+          return
+        }
+        self.setDisplayName(user!)
       }
-      self.setDisplayName(user!)
+    } else {
+      alertSignUpError()
     }
   }
   

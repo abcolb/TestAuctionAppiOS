@@ -23,8 +23,8 @@ class MyBidsListViewController: UIViewController, UITableViewDelegate, UITableVi
               var winningBids: [Bid] = [];
               let winningBidsQuery = self.ref.child("item-bids").child(auctionItem.id).queryOrdered(byChild: "amount").queryLimited(toLast: UInt(auctionItem.quantity))
               winningBidsQuery.observeSingleEvent(of: .value, with: { (snapshot) in
-                for child in snapshot.children {
-                  let bid = Bid(snapshot: child as! FIRDataSnapshot)
+                for child in snapshot.children.allObjects as! [FIRDataSnapshot] {
+                  let bid = Bid(snapshot: child)
                   winningBids.append(bid)
                   if (bid.user == self.getUid()){
                     auctionItem.userIsWinning = true
@@ -32,8 +32,14 @@ class MyBidsListViewController: UIViewController, UITableViewDelegate, UITableVi
                     auctionItem.userIsOutbid = true
                   }
                   auctionItem.winningBids = winningBids;
-                  self.items.append(auctionItem)
-                  self.tableView.reloadData()
+                  print("KEY", child.key)
+                  print("ITEMS", String(describing: self.items))
+                  let matchingItems = self.items.filter { $0.id == child.key }
+                  print("MATCHING ITEMS", matchingItems)
+                  if (matchingItems.count == 0) {
+                    self.items.append(auctionItem)
+                    self.tableView.reloadData()
+                  }
                 }
               })
             }) { (error) in
