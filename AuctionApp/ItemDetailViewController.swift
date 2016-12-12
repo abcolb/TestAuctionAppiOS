@@ -72,11 +72,14 @@ class ItemDetailViewController: UIViewController {
           if let url = URL(string: self.item!.imageUrl) {
             URLSession.shared.dataTask(with: url) { (data, response, error) in
               if (error != nil) {
-                // print("Failed fetching image:", error)
+                DispatchQueue.main.async {
+                  itemImageView.image = UIImage(named: "sproket")
+                }
               } else if let response = response as? HTTPURLResponse, response.statusCode != 200 {
-                // print("Not a proper HTTPURLResponse or statusCode")
+                DispatchQueue.main.async {
+                  itemImageView.image = UIImage(named: "sproket")
+                }
               } else if (data != nil) {
-                // print("SUCCESS")
                 DispatchQueue.main.async {
                   itemImageView.image = UIImage(data: data!)
                 }
@@ -84,24 +87,28 @@ class ItemDetailViewController: UIViewController {
             }.resume()
           }
         }
-
-        if (self.item!.numBids > 0) {
-          currentBidLabel.text = self.item!.getWinningBidsString()
-          if (self.item!.userIsWinning) {
-            if (self.item!.quantity > 1) {
-              numberOfBidsLabel.text = "NICE! YOUR BID IS WINNING"
-            } else {
-              numberOfBidsLabel.text = "NICE! YOUR BID OF $" + String(describing: self.item!.userWinningBid!.amount) + " IS WINNING"
-            }
-          } else if (self.item!.userIsOutbid) {
-            numberOfBidsLabel.text = "YOU'VE BEEN OUTBID!"
-          } else {
-            numberOfBidsLabel.text = "WINNING BIDS (" + String(item!.numBids) + " total bids)"
-          }
+        if (self.item?.isLive == 1) {
+          numberOfBidsLabel.text = "ATTEND LIVE AUCTION FOR BIDDING"
+          currentBidLabel.text = "LIVE ITEM"
         } else {
-          numberOfBidsLabel.text = "SUGGESTED OPENING BID"
-          currentBidLabel.text = "$" + String(item!.openBid)
-          currentBidLabel.textColor = UIColor(red:0.26, green:0.36, blue:0.46, alpha:1.0)
+          if (self.item!.numBids > 0) {
+            currentBidLabel.text = self.item!.getWinningBidsString()
+            if (self.item!.userIsWinning) {
+              if (self.item!.quantity > 1) {
+                numberOfBidsLabel.text = "NICE! YOUR BID IS WINNING"
+              } else {
+                numberOfBidsLabel.text = "NICE! YOUR BID OF $" + String(describing: self.item!.userWinningBid!.amount) + " IS WINNING"
+              }
+            } else if (self.item!.userIsOutbid) {
+              numberOfBidsLabel.text = "YOU'VE BEEN OUTBID!"
+            } else {
+              numberOfBidsLabel.text = "WINNING BIDS (" + String(item!.numBids) + " total bids)"
+            }
+          } else {
+            numberOfBidsLabel.text = "SUGGESTED OPENING BID"
+            currentBidLabel.text = "$" + String(item!.openBid)
+            currentBidLabel.textColor = UIColor(red:0.26, green:0.36, blue:0.46, alpha:1.0)
+          }
         }
 
         //bidderSegmentControl
@@ -119,33 +126,24 @@ class ItemDetailViewController: UIViewController {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy/MM/dd HH:mm"
 
-        // SMOKE TEST DATA
-        //let BIDDING_OPENS = formatter.date(from: "2016/12/09 12:00")
-        let BIDDING_OPENS = formatter.date(from: "2016/12/08 12:00")
-        let BIDDING_CLOSES = formatter.date(from: "2016/12/09 16:00")
-        let LIVE_BIDDING_OPENS = formatter.date(from: "2016/12/09 15:00")
-
-        // LIVE AUCTION DATA
-        // let BIDDING_OPENS = formatter.date(from: "2016/12/12 15:00")
-        // let BIDDING_CLOSES = formatter.date(from: "2016/12/14 20:00")
-        // let LIVE_BIDDING_OPENS = formatter.date(from: "2016/12/14 17:00")
+        //let BIDDING_OPENS = formatter.date(from: "2016/12/13 12:00")
+        let BIDDING_OPENS = formatter.date(from: "2016/12/11 12:00")
+        let BIDDING_CLOSES = formatter.date(from: "2016/12/14 19:00")
+        let LIVE_BIDDING_OPENS = formatter.date(from: "2016/12/14 17:00")
 
         let now = NSDate()
-        formatter.dateFormat = "MM/dd HH:mm"
-
+        formatter.dateStyle = .short
+        formatter.timeStyle = .short
+        
         if (now.compare(BIDDING_CLOSES!) == ComparisonResult.orderedDescending) {
           bidderSegmentedControl.isEnabled = false
           bidderSegmentedControl.tintColor = UIColor(red:0.26, green:0.36, blue:0.46, alpha:1.0)
           biddingStatusLabel.text = ("Sorry, bidding has closed").uppercased()
         }
         if (self.item?.isLive == 1) {
-          if (now.compare(LIVE_BIDDING_OPENS!) == ComparisonResult.orderedDescending) {
-            biddingStatusLabel.text = ("Bidding closes " + formatter.string(from: BIDDING_CLOSES!)).uppercased()
-          } else {
-            bidderSegmentedControl.isEnabled = false
-            bidderSegmentedControl.tintColor = UIColor(red:0.26, green:0.36, blue:0.46, alpha:1.0)
-            biddingStatusLabel.text = ("Bidding opens " + formatter.string(from: LIVE_BIDDING_OPENS!)).uppercased()
-          }
+          bidderSegmentedControl.isEnabled = false
+          bidderSegmentedControl.tintColor = UIColor(red:0.26, green:0.36, blue:0.46, alpha:1.0)
+          biddingStatusLabel.text = ("Bidding opens " + formatter.string(from: LIVE_BIDDING_OPENS!)).uppercased()
         } else {
           if (now.compare(BIDDING_OPENS!) == ComparisonResult.orderedDescending) {
             biddingStatusLabel.text = ("Bidding closes " + formatter.string(from: BIDDING_CLOSES!)).uppercased()

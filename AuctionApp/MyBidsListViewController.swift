@@ -17,8 +17,8 @@ class MyBidsListViewController: UIViewController, UITableViewDelegate, UITableVi
     if (user != nil) {
       self.ref.child("users").child(self.getUid()).child("item-bids").observe(.value, with: { snapshot in
         if snapshot.exists() {
-          for key in (((snapshot.value as AnyObject).allKeys)! as? [String])! {
-            self.ref.child("items").child(key).observe(.value, with: { (snapshot) in
+          for child in snapshot.children.allObjects as! [FIRDataSnapshot] {
+            self.ref.child("items").child(child.key as String).observe(.value, with: { (snapshot) in
               var auctionItem = Item(snapshot: snapshot)
               var winningBids: [Bid] = [];
               let winningBidsQuery = self.ref.child("item-bids").child(auctionItem.id).queryOrdered(byChild: "amount").queryLimited(toLast: UInt(auctionItem.quantity))

@@ -100,25 +100,19 @@ struct Item {
   func getIsBiddingOpen() -> Bool {
     let formatter = DateFormatter()
     formatter.dateFormat = "yyyy/MM/dd HH:mm"
-    // SMOKE TEST DATA
-    let BIDDING_OPENS = formatter.date(from: "2016/12/08 12:00")
-    let BIDDING_CLOSES = formatter.date(from: "2016/12/09 16:00")
-    let LIVE_BIDDING_OPENS = formatter.date(from: "2016/12/09 15:00")
     
-    // LIVE AUCTION DATA
-    // let BIDDING_OPENS = formatter.date(from: "2016/12/12 15:00")
-    // let BIDDING_CLOSES = formatter.date(from: "2016/12/14 20:00")
-    // let LIVE_BIDDING_OPENS = formatter.date(from: "2016/12/14 17:00")
+    // let BIDDING_OPENS = formatter.date(from: "2016/12/13 12:00")
+    let BIDDING_OPENS = formatter.date(from: "2016/12/11 12:00")
+    let BIDDING_CLOSES = formatter.date(from: "2016/12/14 19:00")
     
     let now = NSDate()
     
-    if (now.compare(BIDDING_CLOSES!) == ComparisonResult.orderedDescending) {
+    if (isLive == 1) {
       return false
     }
-    if (isLive == 1) {
-      if (now.compare(LIVE_BIDDING_OPENS!) != ComparisonResult.orderedDescending) {
-        return false
-      }
+    
+    if (now.compare(BIDDING_CLOSES!) == ComparisonResult.orderedDescending) {
+      return false
     } else {
       if (now.compare(BIDDING_OPENS!) != ComparisonResult.orderedDescending) {
         return false
@@ -130,7 +124,6 @@ struct Item {
   func getWinningBidsString() -> String {
     var winningBidsString = ""
     for bid in self.winningBids {
-      print("BID", bid.amount)
       winningBidsString += "$" + String(describing: bid.amount) + " "
     }
     return winningBidsString
