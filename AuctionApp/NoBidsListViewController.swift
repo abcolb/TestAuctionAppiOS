@@ -39,7 +39,21 @@ class NoBidsListViewController: UIViewController, UITableViewDelegate, UITableVi
   }
   
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return self.items.count
+    if (self.items.count < 1) {
+      let messageLabel = UILabel(frame: CGRect(x: 0, y: 0, width: tableView.bounds.size.width, height: tableView.bounds.size.height))
+      messageLabel.text = "Awesome, all items have bids!\nCheck out My Bids to see if you've been outbid"
+      messageLabel.textColor = UIColor(red:0.26, green:0.36, blue:0.46, alpha:1.0)
+      messageLabel.numberOfLines = 0;
+      messageLabel.textAlignment = .center;
+      messageLabel.font = UIFont(name: "AvenirNext-Regular", size: 15.0)
+      messageLabel.sizeToFit()
+      
+      tableView.backgroundView = messageLabel;
+      tableView.separatorStyle = .none;
+      return 0;
+    } else {
+      return self.items.count
+    }
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

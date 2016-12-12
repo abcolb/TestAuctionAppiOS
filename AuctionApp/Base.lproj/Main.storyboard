@@ -124,7 +124,7 @@
             </objects>
             <point key="canvasLocation" x="14" y="820"/>
         </scene>
-        <!--No bids yet-->
+        <!--No bids-->
         <scene sceneID="t5D-VE-SV4">
             <objects>
                 <viewController id="Nmm-VA-ayW" customClass="NoBidsListViewController" customModule="AuctionApp" customModuleProvider="target" sceneMemberID="viewController">
@@ -254,7 +254,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" title="No bids yet" id="IpS-pQ-yBQ"/>
+                    <navigationItem key="navigationItem" title="No bids" id="IpS-pQ-yBQ"/>
                     <connections>
                         <outlet property="tableView" destination="PWw-eC-AJT" id="PBj-9s-K4G"/>
                         <segue destination="y83-jR-jAt" kind="show" identifier="detail" id="oWX-Yb-d9K"/>
@@ -759,9 +759,10 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Jzu-HU-Wmf" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="No bids" image="icon-circle" id="TcG-LB-0Mi"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="f9i-xa-vwk">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" translucent="NO" id="f9i-xa-vwk">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="barTintColor" red="0.26321634649999998" green="0.35505452749999999" blue="0.4589998126" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <textAttributes key="titleTextAttributes">
                             <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="18"/>
@@ -783,9 +784,10 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="yfQ-A1-gFq" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="My bids" image="fave" id="A3Z-cQ-CrB"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="Uhd-ZO-2pa">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" translucent="NO" id="Uhd-ZO-2pa">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="barTintColor" red="0.26321634649999998" green="0.35505452749999999" blue="0.4589998126" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <textAttributes key="titleTextAttributes">
                             <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="18"/>
