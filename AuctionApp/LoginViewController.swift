@@ -7,6 +7,8 @@ class LoginViewController: UIViewController {
   @IBOutlet weak var emailTextField: UITextField!
   @IBOutlet weak var passwordTextField: UITextField!
   
+  @IBAction func unwindToLogin(segue: UIStoryboardSegue) {}
+  
   func signedIn(_ user: FIRUser?) {
     performSegue(withIdentifier: loginToList, sender: nil)
   }

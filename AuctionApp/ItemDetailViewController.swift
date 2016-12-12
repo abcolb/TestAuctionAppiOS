@@ -34,10 +34,6 @@ class ItemDetailViewController: UIViewController {
               for child in snapshot.children {
                 let bid = Bid(snapshot: child as! FIRDataSnapshot)
                 winningBids.append(bid)
-                print("ITEM", auctionItem)
-                print("BID USER", bid.user)
-                print("UUID", self.getUid())
-                print("TRUE?", bid.user == self.getUid())
                 if (bid.user == self.getUid()){
                   auctionItem.userIsWinning = true
                   auctionItem.userWinningBids.append(bid)

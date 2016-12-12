@@ -14,7 +14,9 @@ class ItemListViewController: UIViewController, UITableViewDelegate, UITableView
     ref = FIRDatabase.database().reference()
 
     let user = FIRAuth.auth()?.currentUser
-    if (user != nil) {
+    if (user == nil) {
+      self.performSegue(withIdentifier: "unwindToLogin", sender: self)
+    } else {
       self.items = []
       ref.child("items").observe(.value, with: { snapshot in
         for item in snapshot.children {
@@ -154,4 +156,5 @@ class ItemListViewController: UIViewController, UITableViewDelegate, UITableView
     detail.itemKey = self.items[path.item].id
     detail.hidesBottomBarWhenPushed = true
   }
+  
 }
