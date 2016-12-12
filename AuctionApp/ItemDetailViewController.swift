@@ -131,8 +131,7 @@ class ItemDetailViewController: UIViewController {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy/MM/dd HH:mm"
 
-        //let BIDDING_OPENS = formatter.date(from: "2016/12/13 12:00")
-        let BIDDING_OPENS = formatter.date(from: "2016/12/11 12:00")
+        let BIDDING_OPENS = formatter.date(from: "2016/12/13 12:00")
         let BIDDING_CLOSES = formatter.date(from: "2016/12/14 19:00")
         let LIVE_BIDDING_OPENS = formatter.date(from: "2016/12/14 17:00")
 
