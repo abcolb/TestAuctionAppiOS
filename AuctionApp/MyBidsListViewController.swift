@@ -15,6 +15,7 @@ class MyBidsListViewController: UIViewController, UITableViewDelegate, UITableVi
 
     let user = FIRAuth.auth()?.currentUser
     if (user != nil) {
+      self.items = []
       self.ref.child("users").child(self.getUid()).child("item-bids").observe(.value, with: { snapshot in
         if snapshot.exists() {
           for child in snapshot.children.allObjects as! [FIRDataSnapshot] {

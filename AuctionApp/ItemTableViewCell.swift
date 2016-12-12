@@ -45,7 +45,15 @@ class ItemTableViewCell: UITableViewCell {
     suggestedActionLabel.text = ""
   }
   
-  func setBidStatus(){
+  func setBidStatus() {
+    if (self.item!.getIsBiddingOpen() != true) {
+      self.setBiddingDisabled()
+    } else {
+      self.setShouldBid()
+    }
+  }
+  
+  /*func setBidStatus(){
     if (self.item!.getIsBiddingOpen() != true) {
       self.setBiddingDisabled()
     } else if (self.item!.userIsOutbid == true) {
@@ -55,6 +63,6 @@ class ItemTableViewCell: UITableViewCell {
     } else {
       self.setShouldBid()
     }
-  }
+  }*/
   
 }
