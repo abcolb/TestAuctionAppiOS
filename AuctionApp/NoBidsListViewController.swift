@@ -20,7 +20,6 @@ class NoBidsListViewController: UIViewController, UITableViewDelegate, UITableVi
         for auctionItem in snapshot.children.allObjects as! [FIRDataSnapshot] {
           let dict = auctionItem.value as! Dictionary<String, AnyObject>
           if dict["bids"] == nil {
-            print("NO BID ITEM", String(describing: auctionItem))
             let auctionItem = Item(snapshot: auctionItem)
             self.items.append(auctionItem)
             self.tableView.reloadData()

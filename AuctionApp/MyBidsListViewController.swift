@@ -32,15 +32,9 @@ class MyBidsListViewController: UIViewController, UITableViewDelegate, UITableVi
                     auctionItem.userIsOutbid = true
                   }
                   auctionItem.winningBids = winningBids;
-                  print("KEY", child.key)
-                  print("ITEMS", String(describing: self.items))
-                  let matchingItems = self.items.filter { $0.id == child.key }
-                  print("MATCHING ITEMS", matchingItems)
-                  if (matchingItems.count == 0) {
-                    self.items.append(auctionItem)
-                    self.tableView.reloadData()
-                  }
                 }
+                self.items.append(auctionItem)
+                self.tableView.reloadData()
               })
             }) { (error) in
               print(error.localizedDescription)

@@ -46,7 +46,6 @@ class ItemTableViewCell: UITableViewCell {
   }
   
   func setBidStatus(){
-    print(String(describing: self.item))
     if (self.item!.getIsBiddingOpen() != true) {
       self.setBiddingDisabled()
     } else if (self.item!.userIsOutbid == true) {
