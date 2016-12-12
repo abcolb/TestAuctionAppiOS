@@ -43,10 +43,8 @@ class ItemDetailViewController: UIViewController {
               }
             })
             self.ref.child("users").child(self.getUid()).child("item-bids").child(auctionItem.id).observeSingleEvent(of: .value, with: { (snapshot) in
-              for _ in snapshot.children {
-                if (!auctionItem.userIsWinning) {
-                  auctionItem.userIsOutbid = true;
-                }
+              if (snapshot.childrenCount > 0 && !auctionItem.userIsWinning) {
+                auctionItem.userIsOutbid = true;
               }
               self.item = auctionItem
               self.configureView()

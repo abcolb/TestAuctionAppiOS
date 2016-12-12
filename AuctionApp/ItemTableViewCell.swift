@@ -47,11 +47,11 @@ class ItemTableViewCell: UITableViewCell {
   
   func setBidStatus(){
     print(String(describing: self.item))
-    if (!self.item!.getIsBiddingOpen()) {
+    if (self.item!.getIsBiddingOpen() != true) {
       self.setBiddingDisabled()
-    } else if (self.item!.userIsOutbid) {
+    } else if (self.item!.userIsOutbid == true) {
       self.setOutbid()
-    } else if (self.item!.userIsWinning) {
+    } else if (self.item!.userIsWinning == true) {
       self.setWinning()
     } else {
       self.setShouldBid()
