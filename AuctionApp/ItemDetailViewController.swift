@@ -34,19 +34,23 @@ class ItemDetailViewController: UIViewController {
               for child in snapshot.children {
                 let bid = Bid(snapshot: child as! FIRDataSnapshot)
                 winningBids.append(bid)
+                print("ITEM", auctionItem)
+                print("BID USER", bid.user)
+                print("UUID", self.getUid())
+                print("TRUE?", bid.user == self.getUid())
                 if (bid.user == self.getUid()){
                   auctionItem.userIsWinning = true
-                  auctionItem.userWinningBid = bid
+                  auctionItem.userWinningBids.append(bid)
                 }
-                auctionItem.winningBids = winningBids
               }
-            })
-            self.ref.child("users").child(self.getUid()).child("item-bids").child(auctionItem.id).observeSingleEvent(of: .value, with: { (snapshot) in
-              if (snapshot.childrenCount > 0 && !auctionItem.userIsWinning) {
-                auctionItem.userIsOutbid = true;
-              }
-              self.item = auctionItem
-              self.configureView()
+              auctionItem.winningBids = winningBids
+              self.ref.child("users").child(self.getUid()).child("item-bids").child(auctionItem.id).observeSingleEvent(of: .value, with: { (snapshot) in
+                if (snapshot.childrenCount > 0 && auctionItem.userIsWinning == false) {
+                  auctionItem.userIsOutbid = true;
+                }
+                self.item = auctionItem
+                self.configureView()
+              })
             })
           } else {
             self.item = auctionItem
@@ -89,13 +93,18 @@ class ItemDetailViewController: UIViewController {
         } else {
           if (self.item!.numBids > 0) {
             currentBidLabel.text = self.item!.getWinningBidsString()
-            if (self.item!.userIsWinning) {
-              if (self.item!.quantity > 1) {
-                numberOfBidsLabel.text = "NICE! YOUR BID IS WINNING"
+            if (self.item!.userIsWinning == true) {
+              if (self.item!.userWinningBids.count == 1) {
+                numberOfBidsLabel.text = "NICE! YOUR BID OF $" + String(describing: self.item!.userWinningBids.first!.amount) + " IS WINNING"
               } else {
-                numberOfBidsLabel.text = "NICE! YOUR BID OF $" + String(describing: self.item!.userWinningBid!.amount) + " IS WINNING"
+                var numberOfBidsLabelString = "NICE! YOUR BIDS ARE WINNING ( "
+                for userWinningBid in (self.item?.userWinningBids)! {
+                  numberOfBidsLabelString += "$" + String(describing: userWinningBid.amount) + " "
+                }
+                numberOfBidsLabelString += ")"
+                numberOfBidsLabel.text = numberOfBidsLabelString
               }
-            } else if (self.item!.userIsOutbid) {
+            } else if (self.item!.userIsOutbid == true) {
               numberOfBidsLabel.text = "YOU'VE BEEN OUTBID!"
             } else {
               numberOfBidsLabel.text = "WINNING BIDS (" + String(item!.numBids) + " total bids, " + String(self.item!.quantity) + " available)"

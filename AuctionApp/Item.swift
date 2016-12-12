@@ -14,9 +14,9 @@ struct Item {
   var winningBids: [Bid] = []
   var userIsWinning: Bool
   var userIsOutbid: Bool
-  var userWinningBid: Bid?
+  var userWinningBids: [Bid] = []
 
-  init(name: String, addedByUser: String, description: String, imageUrl: String, quantity: Int, openBid: Int, isLive: Int, numBids: Int, winningBids: [Bid], userWinningBid: Bid, key: String = "") {
+  init(name: String, addedByUser: String, description: String, imageUrl: String, quantity: Int, openBid: Int, isLive: Int, numBids: Int, winningBids: [Bid], userWinningBids: [Bid], key: String = "") {
     self.id = key
     self.name = name
     self.addedByUser = addedByUser
@@ -29,7 +29,7 @@ struct Item {
     self.winningBids = []
     self.userIsWinning = false
     self.userIsOutbid = false
-    self.userWinningBid = userWinningBid
+    self.userWinningBids = []
   }
 
   init(snapshot: FIRDataSnapshot) {
@@ -130,7 +130,7 @@ struct Item {
   func getWinningBidsString() -> String {
     var winningBidsString = ""
     for bid in self.winningBids {
-      winningBidsString += "$" + String(describing: bid.amount) + " (" + String(describing: bid.user) + ")"
+      winningBidsString += "$" + String(describing: bid.amount) + " "
     }
     return winningBidsString
   }

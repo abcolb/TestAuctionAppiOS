@@ -20,22 +20,31 @@ class MyBidsListViewController: UIViewController, UITableViewDelegate, UITableVi
           for child in snapshot.children.allObjects as! [FIRDataSnapshot] {
             self.ref.child("items").child(child.key as String).observe(.value, with: { (snapshot) in
               var auctionItem = Item(snapshot: snapshot)
-              var winningBids: [Bid] = [];
-              let winningBidsQuery = self.ref.child("item-bids").child(auctionItem.id).queryOrdered(byChild: "amount").queryLimited(toLast: UInt(auctionItem.quantity))
-              winningBidsQuery.observeSingleEvent(of: .value, with: { (snapshot) in
-                for child in snapshot.children.allObjects as! [FIRDataSnapshot] {
-                  let bid = Bid(snapshot: child)
-                  winningBids.append(bid)
-                  if (bid.user == self.getUid()){
-                    auctionItem.userIsWinning = true
-                  } else {
-                    auctionItem.userIsOutbid = true
+              if (auctionItem.numBids != 0) {
+                var winningBids: [Bid] = []
+                let winningBidsQuery = self.ref.child("item-bids").child(auctionItem.id).queryOrdered(byChild: "amount").queryLimited(toLast: UInt(auctionItem.quantity))
+                winningBidsQuery.observeSingleEvent(of: .value, with: { (snapshot) in
+                  for child in snapshot.children {
+                    let bid = Bid(snapshot: child as! FIRDataSnapshot)
+                    winningBids.append(bid)
+                    if (bid.user == self.getUid()){
+                      auctionItem.userIsWinning = true
+                      auctionItem.userWinningBids.append(bid)
+                    }
                   }
-                  auctionItem.winningBids = winningBids;
-                }
+                  auctionItem.winningBids = winningBids
+                  self.ref.child("users").child(self.getUid()).child("item-bids").child(auctionItem.id).observeSingleEvent(of: .value, with: { (snapshot) in
+                    if (snapshot.childrenCount > 0 && auctionItem.userIsWinning == false) {
+                      auctionItem.userIsOutbid = true;
+                    }
+                    self.items.append(auctionItem)
+                    self.tableView.reloadData()
+                  })
+                })
+              } else {
                 self.items.append(auctionItem)
                 self.tableView.reloadData()
-              })
+              }
             }) { (error) in
               print(error.localizedDescription)
             }
