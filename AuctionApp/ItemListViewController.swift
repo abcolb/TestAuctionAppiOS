@@ -17,8 +17,8 @@ class ItemListViewController: UIViewController, UITableViewDelegate, UITableView
     if (user == nil) {
       self.performSegue(withIdentifier: "unwindToLogin", sender: self)
     } else {
-      self.items = []
       ref.child("items").observe(.value, with: { snapshot in
+        self.items = []
         for item in snapshot.children {
           var auctionItem = Item(snapshot: item as! FIRDataSnapshot)
           if (auctionItem.numBids != 0) {

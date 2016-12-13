@@ -15,8 +15,8 @@ class MyBidsListViewController: UIViewController, UITableViewDelegate, UITableVi
 
     let user = FIRAuth.auth()?.currentUser
     if (user != nil) {
-      self.items = []
       self.ref.child("users").child(self.getUid()).child("item-bids").observe(.value, with: { snapshot in
+        self.items = []
         if snapshot.exists() {
           for child in snapshot.children.allObjects as! [FIRDataSnapshot] {
             self.ref.child("items").child(child.key as String).observe(.value, with: { (snapshot) in
@@ -38,13 +38,17 @@ class MyBidsListViewController: UIViewController, UITableViewDelegate, UITableVi
                     if (snapshot.childrenCount > 0 && auctionItem.userIsWinning == false) {
                       auctionItem.userIsOutbid = true;
                     }
-                    self.items.append(auctionItem)
-                    self.tableView.reloadData()
+                    if (self.items.contains(where: {$0.id == auctionItem.id}) == false) {
+                      self.items.append(auctionItem)
+                      self.tableView.reloadData()
+                    }
                   })
                 })
               } else {
-                self.items.append(auctionItem)
-                self.tableView.reloadData()
+                if (self.items.contains(where: {$0.id == auctionItem.id}) == false) {
+                  self.items.append(auctionItem)
+                  self.tableView.reloadData()
+                }
               }
             }) { (error) in
               print(error.localizedDescription)
